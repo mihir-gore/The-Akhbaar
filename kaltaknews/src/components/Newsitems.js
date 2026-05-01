@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 
+
 export class Newsitems extends Component {
+    
+    
     render() {
         let { title, description, imgurl, link } = this.props;
         return (

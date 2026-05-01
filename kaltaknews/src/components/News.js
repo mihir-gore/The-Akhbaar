@@ -2,7 +2,10 @@ import fallbackimg from '../images/image.png'
 import React, { Component } from 'react'
 import Newsitems from './Newsitems'
 
+
 export class News extends Component {
+
+ 
 
 
     constructor() {
@@ -11,10 +14,25 @@ export class News extends Component {
             results: [],
             nextPage: null,
             pagestack: [],
-            loading: false
+            loading: false,
+           
         }
     }
-
+   
+    componentDidUpdate(prevProps){
+        if(prevProps.category!==this.props.category){
+            this.setState({ loading: true });
+            let url = `https://newsdata.io/api/1/latest?apikey=pub_4041938c8db745e8bec79956556364da&country=in&language=en,hi&category=${this.props.category}`;
+            fetch(url).then((response)=>response.json()).then((data)=>{
+                this.setState({
+                    results: data.results || [],
+                    nextPage: data.nextPage || null,
+                    pagestack:[],
+                    loading: false
+                })
+            });
+        }
+    }
 
     handlepreviousbtn = async () => {
         console.log("previous");
@@ -22,7 +40,7 @@ export class News extends Component {
         if  (pagestack.length===0) return;
         const prevPage=pagestack[pagestack.length-1];
         this.setState({ loading: true });
-        let url = prevPage ?`https://newsdata.io/api/1/latest?apikey=pub_4041938c8db745e8bec79956556364da&country=in&language=en,hi&page=${prevPage}` : "https://newsdata.io/api/1/latest?apikey=pub_4041938c8db745e8bec79956556364da&country=in&language=en,hi";
+        let url = prevPage ?`https://newsdata.io/api/1/latest?apikey=pub_4041938c8db745e8bec79956556364da&country=in&language=en,hi&category=${this.props.category}&page=${prevPage}` : `https://newsdata.io/api/1/latest?apikey=pub_4041938c8db745e8bec79956556364da&country=in&language=en,hi&category=${this.props.category}`;
         let data = await fetch(url);
         let parsedData = await data.json();
         this.setState({
@@ -38,7 +56,7 @@ export class News extends Component {
         if(!this.state.nextPage) return;
         const {nextPage,pagestack}=this.state;
         this.setState({ loading: true });
-        let url = `https://newsdata.io/api/1/latest?apikey=pub_4041938c8db745e8bec79956556364da&country=in&language=en,hi&page=${nextPage}`;
+        let url = `https://newsdata.io/api/1/latest?apikey=pub_4041938c8db745e8bec79956556364da&country=in&language=en,hi&category=${this.props.category}&page=${nextPage}`;
         let data = await fetch(url);
         let parsedData = await data.json();
         this.setState({  results: parsedData.results, pagestack:[...pagestack,nextPage],nextPage: parsedData.nextPage,loading: false });
@@ -46,7 +64,7 @@ export class News extends Component {
 
     async componentDidMount() {
         this.setState({ loading: true });
-        let url = "https://newsdata.io/api/1/latest?apikey=pub_4041938c8db745e8bec79956556364da&country=in&language=en,hi";
+        let url = `https://newsdata.io/api/1/latest?apikey=pub_4041938c8db745e8bec79956556364da&country=in&language=en,hi&category=${this.props.category}`;
         let data = await fetch(url);
         let parsedData = await data.json();
         this.setState({
@@ -59,7 +77,7 @@ export class News extends Component {
     render() {
         return (
             <>
-                <h1 className="text-3xlgit  m-4 ml-9 flex justify-center align-middle">Latest News</h1>
+                <h1 className="text-3xl  m-4 ml-9  flex justify-center align-middle">Latest News</h1>
                 {this.state.loading && (
                      <div className="relative flex flex-col items-center gap-6 px-10 py-8 rounded-2xl bg-white/10 border border-white/20 backdrop-blur-2xl shadow-2xl">
 
