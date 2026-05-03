@@ -40,10 +40,12 @@ export default class Navbar extends Component {
               <a href="#" className="text-gray-700 hover:text-blue-600 transition">
                 Home
               </a>
-
+               
               <div className="flex items-center gap-4">
                 <Categorydropdown onSelect={ this.handleCategorySelect } />
               </div>
+
+              
               <a href="#" className="text-gray-700 hover:text-blue-600 transition">
                 About
               </a>
@@ -53,6 +55,7 @@ export default class Navbar extends Component {
               <a href="#" className="text-gray-700 hover:text-blue-600 transition">
                 Contact
               </a>
+              
             </div>
 
             {/* CTA */ }

@@ -5,7 +5,7 @@ import Newsitems from './Newsitems'
 
 export class News extends Component {
 
- 
+
 
 
     constructor() {
@@ -15,19 +15,19 @@ export class News extends Component {
             nextPage: null,
             pagestack: [],
             loading: false,
-           
+
         }
     }
-   
-    componentDidUpdate(prevProps){
-        if(prevProps.category!==this.props.category){
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.category !== this.props.category) {
             this.setState({ loading: true });
             let url = `https://newsdata.io/api/1/latest?apikey=pub_4041938c8db745e8bec79956556364da&country=in&language=en,hi&category=${this.props.category}`;
-            fetch(url).then((response)=>response.json()).then((data)=>{
+            fetch(url).then((response) => response.json()).then((data) => {
                 this.setState({
                     results: data.results || [],
                     nextPage: data.nextPage || null,
-                    pagestack:[],
+                    pagestack: [],
                     loading: false
                 })
             });
@@ -36,30 +36,30 @@ export class News extends Component {
 
     handlepreviousbtn = async () => {
         console.log("previous");
-        const  {pagestack}=this.state;
-        if  (pagestack.length===0) return;
-        const prevPage=pagestack[pagestack.length-1];
+        const { pagestack } = this.state;
+        if (pagestack.length === 0) return;
+        const prevPage = pagestack[pagestack.length - 1];
         this.setState({ loading: true });
-        let url = prevPage ?`https://newsdata.io/api/1/latest?apikey=pub_4041938c8db745e8bec79956556364da&country=in&language=en,hi&category=${this.props.category}&page=${prevPage}` : `https://newsdata.io/api/1/latest?apikey=pub_4041938c8db745e8bec79956556364da&country=in&language=en,hi&category=${this.props.category}`;
+        let url = prevPage ? `https://newsdata.io/api/1/latest?apikey=pub_4041938c8db745e8bec79956556364da&country=in&language=en,hi&category=${this.props.category}&page=${prevPage}` : `https://newsdata.io/api/1/latest?apikey=pub_4041938c8db745e8bec79956556364da&country=in&language=en,hi&category=${this.props.category}`;
         let data = await fetch(url);
         let parsedData = await data.json();
         this.setState({
             results: parsedData.results || [],
-            pagestack:pagestack.slice(0,-1),
+            pagestack: pagestack.slice(0, -1),
             nextPage: parsedData.nextPage || null,
             loading: false
         });
     }
 
     handlenextbtn = async () => {
-        
-        if(!this.state.nextPage) return;
-        const {nextPage,pagestack}=this.state;
+
+        if (!this.state.nextPage) return;
+        const { nextPage, pagestack } = this.state;
         this.setState({ loading: true });
         let url = `https://newsdata.io/api/1/latest?apikey=pub_4041938c8db745e8bec79956556364da&country=in&language=en,hi&category=${this.props.category}&page=${nextPage}`;
         let data = await fetch(url);
         let parsedData = await data.json();
-        this.setState({  results: parsedData.results, pagestack:[...pagestack,nextPage],nextPage: parsedData.nextPage,loading: false });
+        this.setState({ results: parsedData.results, pagestack: [...pagestack, nextPage], nextPage: parsedData.nextPage, loading: false });
     }
 
     async componentDidMount() {
@@ -77,21 +77,22 @@ export class News extends Component {
     render() {
         return (
             <>
-                <h1 className="text-3xl  m-4 ml-9  flex justify-center align-middle">Latest News</h1>
-                {this.state.loading && (
-                     <div className="relative flex flex-col items-center gap-6 px-10 py-8 rounded-2xl bg-white/10 border border-white/20 backdrop-blur-2xl shadow-2xl">
+                <h1 className="text-3xl  m-4 ml-9  flex justify-center align-middle">{this.props.category.toString().charAt(0).toUpperCase()+this.props.category.toString().slice(1)} News</h1>
+                <div className=" h-[2px] bg-blue-50 mt-2 w-full " ></div>
+                { this.state.loading && (
+                    <div className=" relative flex flex-col items-center gap-6 px-10 py-8 rounded-2xl bg-white/10 border border-white/20 backdrop-blur-2xl shadow-2xl">
 
-                    <div className='flex justify-center items-center py-10'>
-                        <div className='w-10 h-10 border-4 border-blue-400 border-t-transparent rounded-full animate-spin '></div>
+                        <div className='flex justify-center items-center py-10'>
+                            <div className='w-10 h-10 border-4 border-blue-400 border-t-transparent rounded-full animate-spin '></div>
+                        </div>
                     </div>
-                    </div>
-                )}
+                ) }
                 <div className="grid p-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
-                    { this.state.results.map((element) => { return <Newsitems key={ element.article_id } title={ element.title } description={ !element.description ? "To learn more about this news, click the button below.": element.description } imgurl={ element.image_url && element.image_url.trim() !== "" ? element.image_url : fallbackimg } link={ element.link } />; }) }
+                    { this.state.results.map((element) => { return <Newsitems key={ element.article_id } title={ element.title } description={ !element.description ? "To learn more about this news, click the button below." : element.description } imgurl={ element.image_url && element.image_url.trim() !== "" ? element.image_url : fallbackimg } link={ element.link } pubDate={ element.pubDate } creator={ !element.creator ? "Unknown" : element.creator } source_name={element.source_name} />; }) }
                 </div>
                 <div className='flex justify-between m-5'>
-                    <button disabled={this.state.pagestack.length===0} className='bg-blue-500 text-black  px-4 py-2 hover:bg-blue-600 transition rounded-md ' onClick={ this.handlepreviousbtn }> &#8592; Previous </button>
-                    <button disabled={!this.state.nextPage} className='bg-blue-500 text-black  px-4 py-2 hover:bg-blue-600 transition rounded-md' onClick={ this.handlenextbtn }>Next &#8594;</button>
+                    <button disabled={ this.state.pagestack.length === 0 } className='bg-blue-500 text-black  px-4 py-2 hover:bg-blue-600 transition rounded-md ' onClick={ this.handlepreviousbtn }> &#8592; Previous </button>
+                    <button disabled={ !this.state.nextPage } className='bg-blue-500 text-black  px-4 py-2 hover:bg-blue-600 transition rounded-md' onClick={ this.handlenextbtn }>Next &#8594;</button>
                 </div>
             </>
         )
