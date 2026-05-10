@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
 const categories = [
     "Breaking",
@@ -38,60 +38,60 @@ const categories = [
     "Other"
 ]
 
-export default class Categorydropdown extends Component {
-    constructor() {
-        super();
-        this.state = {
-            open: false,
-        }
-        this.menuRef = React.createRef()
-    }
+const Categorydropdown = ({ onSelect }) => {
+    const [open, setOpen] = useState(false);
+    const menuRef = useRef(null);
 
-    componentDidMount() {
-        document.addEventListener("mousedown", this.handleOutsideClick);
-    }
-    componentWillUnmount() {
-        document.removeEventListener("mousedown", this.handleOutsideClick);
-    }
-    handleOutsideClick = (e) => {
-        if (this.menuRef.current && !this.menuRef.current.contains(e.target)) {
-            this.setState({ open: false });
-        }
-    }
-    toggleDropdown = () => {
-        this.setState((prevState) => ({ open: !prevState.open }))
-    }
-    handleSelect = (cat) => {
-        this.props.onSelect(cat);
-        this.setState({ open: false });
-    }
 
-    render() {
-        const { open } = this.state;
-
-        return (
-
-            <div className="relative" ref={this.menuRef}>
-                <button className='text-gray-600 hover:text-blue-600 transition' onClick={ this.toggleDropdown }>
-                    Categories
-                </button>
-                {
-                    open && (
-                        <div className='absolute mt-2 w-48 bg-white rounded-lg shadow-lg z-50'>
-                            <ul className='py-2'>
-                                { categories.map((cat) => (
-                                    <li key={ cat }>
-                                        <button onClick={ () => this.handleSelect(cat) } className='block w-full text-left px-4 py-1 text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition'>
-                                            { cat }
-                                        </button>
-                                    </li>
-                                )) }
-                            </ul>
-                        </div>
-                    )
-                }
-            </div>
-
-        )
+useEffect(() => {
+    const handleOutsideClick = (e) => {
+    if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setOpen(false);
     }
 }
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => {
+        document.removeEventListener("mousedown", handleOutsideClick);
+    };
+}, [])
+
+
+
+const toggleDropdown = () => {
+    setOpen(prev=>!prev);
+}
+const handleSelect = (cat) => {
+    onSelect(cat);
+    setOpen(false);
+}
+
+
+
+
+return (
+
+    <div className="relative" ref={ menuRef }>
+        <button className='text-gray-600 hover:text-blue-600 transition' onClick={ toggleDropdown }>
+            Categories
+        </button>
+        {
+            open && (
+                <div className='absolute mt-2 w-48 bg-white rounded-lg shadow-lg z-50 w-48 max-h-100 overflow-y-auto  rounded-lg shadow-lg z-50 animate-fadeIn'>
+                    <ul className='py-2'>
+                        { categories.map((cat) => (
+                            <li key={ cat }>
+                                <button onClick={ () => handleSelect(cat) } className='block w-full text-left px-4 py-1 text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition'>
+                                    { cat }
+                                </button>
+                            </li>
+                        )) }
+                    </ul>
+                </div>
+            )
+        }
+    </div>
+
+)
+    
+}
+export default Categorydropdown;

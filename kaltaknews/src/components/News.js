@@ -1,102 +1,78 @@
 import fallbackimg from '../images/image.png'
-import React, { Component } from 'react'
+import React,{useEffect, useState} from 'react'
 import Newsitems from './Newsitems'
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { set } from 'date-fns';
 
 
-export class News extends Component {
+const News=(props)=>{
 
+   const [results, setResults] = useState([]);
+   const [nextPage, setNextPage] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const fetchInitialNews = async () => {
+        setLoading(true );
+        const url = `https://newsdata.io/api/1/latest?apikey=pub_4041938c8db745e8bec79956556364da&country=in&language=en,hi&category=${props.category}`;
+        const res = await fetch(url);
+        const data = await res.json();
 
-
-
-    constructor() {
-        super();
-        this.state = {
-            results: [],
-            nextPage: null,
-            pagestack: [],
-            loading: false,
-
-        }
+        setResults(Array.isArray(data.results)?data.results:[]);
+        setNextPage(data.nextPage || null);
+        setLoading(false);
     }
 
-    componentDidUpdate(prevProps) {
-        if (prevProps.category !== this.props.category) {
-            this.setState({ loading: true });
-            let url = `https://newsdata.io/api/1/latest?apikey=pub_4041938c8db745e8bec79956556364da&country=in&language=en,hi&category=${this.props.category}`;
-            fetch(url).then((response) => response.json()).then((data) => {
-                this.setState({
-                    results: data.results || [],
-                    nextPage: data.nextPage || null,
-                    pagestack: [],
-                    loading: false
-                })
-            });
-        }
+    const loadMore = async () => {
+        if (!nextPage) return;
+        let url = `https://newsdata.io/api/1/latest?apikey=pub_4041938c8db745e8bec79956556364da&country=in&language=en,hi&category=${props.category}&page=${nextPage}`;
+        let res = await fetch(url);
+        let data = await res.json();
+        setResults(prevResults => [...prevResults, ...(Array.isArray(data.results) ? data.results : [])]);
+        setNextPage(data.nextPage || null);
+        setLoading(false);
     }
+    
+    useEffect(()=>{
+        fetchInitialNews();
+        document.title = `${props.category.toString().charAt(0).toUpperCase() + props.category.toString().toLowerCase().slice(1)} - KalTakNews`
 
-    handlepreviousbtn = async () => {
-        console.log("previous");
-        const { pagestack } = this.state;
-        if (pagestack.length === 0) return;
-        const prevPage = pagestack[pagestack.length - 1];
-        this.setState({ loading: true });
-        let url = prevPage ? `https://newsdata.io/api/1/latest?apikey=pub_4041938c8db745e8bec79956556364da&country=in&language=en,hi&category=${this.props.category}&page=${prevPage}` : `https://newsdata.io/api/1/latest?apikey=pub_4041938c8db745e8bec79956556364da&country=in&language=en,hi&category=${this.props.category}`;
-        let data = await fetch(url);
-        let parsedData = await data.json();
-        this.setState({
-            results: parsedData.results || [],
-            pagestack: pagestack.slice(0, -1),
-            nextPage: parsedData.nextPage || null,
-            loading: false
-        });
-    }
+    }, [props.category]);
 
-    handlenextbtn = async () => {
 
-        if (!this.state.nextPage) return;
-        const { nextPage, pagestack } = this.state;
-        this.setState({ loading: true });
-        let url = `https://newsdata.io/api/1/latest?apikey=pub_4041938c8db745e8bec79956556364da&country=in&language=en,hi&category=${this.props.category}&page=${nextPage}`;
-        let data = await fetch(url);
-        let parsedData = await data.json();
-        this.setState({ results: parsedData.results, pagestack: [...pagestack, nextPage], nextPage: parsedData.nextPage, loading: false });
-    }
-
-    async componentDidMount() {
-        this.setState({ loading: true });
-        let url = `https://newsdata.io/api/1/latest?apikey=pub_4041938c8db745e8bec79956556364da&country=in&language=en,hi&category=${this.props.category}`;
-        let data = await fetch(url);
-        let parsedData = await data.json();
-        this.setState({
-            results: parsedData.results || [],
-            nextPage: parsedData.nextPage || null,
-            loading: false
-        });
-    }
-
-    render() {
         return (
             <>
-                <h1 className="text-3xl  m-4 ml-9  flex justify-center align-middle">{this.props.category.toString().charAt(0).toUpperCase()+this.props.category.toString().slice(1)} News</h1>
-                <div className=" h-[2px] bg-blue-50 mt-2 w-full " ></div>
-                { this.state.loading && (
-                    <div className=" relative flex flex-col items-center gap-6 px-10 py-8 rounded-2xl bg-white/10 border border-white/20 backdrop-blur-2xl shadow-2xl">
 
-                        <div className='flex justify-center items-center py-10'>
-                            <div className='w-10 h-10 border-4 border-blue-400 border-t-transparent rounded-full animate-spin '></div>
-                        </div>
+                <h1 className="text-3xl  m-4 ml-9  flex justify-center align-middle">{props.category.toString().charAt(0).toUpperCase() + props.category.toString().slice(1) } News</h1>
+
+                <div className=" h-[2px] bg-blue-50 mt-2 w-full " ></div>
+
+
+              { loading && results.length === 0 ? (
+                    <div className="flex justify-center items-center h-[60vh]">
+                        <div className="w-10 h-10 border-4 border-[#4F7C82] border-t-transparent rounded-full animate-spin"></div>
                     </div>
-                ) }
-                <div className="grid p-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
-                    { this.state.results.map((element) => { return <Newsitems key={ element.article_id } title={ element.title } description={ !element.description ? "To learn more about this news, click the button below." : element.description } imgurl={ element.image_url && element.image_url.trim() !== "" ? element.image_url : fallbackimg } link={ element.link } pubDate={ element.pubDate } creator={ !element.creator ? "Unknown" : element.creator } source_name={element.source_name} />; }) }
-                </div>
-                <div className='flex justify-between m-5'>
-                    <button disabled={ this.state.pagestack.length === 0 } className='bg-blue-500 text-black  px-4 py-2 hover:bg-blue-600 transition rounded-md ' onClick={ this.handlepreviousbtn }> &#8592; Previous </button>
-                    <button disabled={ !this.state.nextPage } className='bg-blue-500 text-black  px-4 py-2 hover:bg-blue-600 transition rounded-md' onClick={ this.handlenextbtn }>Next &#8594;</button>
-                </div>
+                ) : (
+                    <InfiniteScroll dataLength={ results.length }
+                        next={ loadMore } hasMore={ !!nextPage } loader={
+                            <span className="flex justify-center items-center gap-1 mb-2">
+                                { [...Array(3)].map((_, i) => (
+                                    <span
+                                        key={ i }
+                                        className="w-1.5 h-1.5 bg-[#4F7C82] rounded-full animate-pulse"
+                                        style={ { animationDelay: `${i * 0.2}s` } }
+                                    ></span>
+                                )) }
+                            </span>
+                        } >
+                    
+                        <div className="grid p-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
+                            { results.map((element) => { return <Newsitems key={ element.article_id } title={ element.title } description={ !element.description ? "To learn more about this news, click the button below." : element.description } imgurl={ element.image_url && element.image_url.trim() !== "" ? element.image_url : fallbackimg } link={ element.link } pubDate={ element.pubDate } creator={ !element.creator ? "Unknown" : element.creator } source_name={ element.source_name } />; }) }
+                        </div>
+                         </InfiniteScroll>
+                          ) }
+ 
             </>
         )
-    }
+    
 }
 
 export default News 

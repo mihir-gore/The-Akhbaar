@@ -1,34 +1,27 @@
-import React, { Component } from 'react'
+import React, {useState} from 'react'
 import Navbar from './components/Navbar'
 import Newsitems from './components/Newsitems'
 import News from './components/News'
  
 
 
-export class App extends Component {
+const  App=()=> {
 
-  constructor(props){
-    super(props);
-      this.state={
-        category:"top"
-      }
-    }
-  
-  setCategory=(category)=>{
-    this.setState({ category });
-  }
-  render() {
+
+  const [category, setCategory] = useState("top")
+
+
     return (
       <>
        
-       <Navbar setCategory={ this.setCategory } />
+       <Navbar setCategory={ setCategory } />
            
-    <News category={ this.state.category } />
+      <News category={category } />
 
          
       </>
     )
-  }
+  
 }
 
 export default App

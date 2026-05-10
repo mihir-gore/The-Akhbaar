@@ -1,13 +1,13 @@
-import React, { Component } from 'react'
+import React,{useState} from 'react'
 import {formatDistanceToNowStrict} from 'date-fns'
+    
 
+const Newsitems = (props) => {  
+    
 
-export class Newsitems extends Component {
+    const time=formatDistanceToNowStrict(new Date(props.pubDate),{addSuffix:true})
 
-    render() {
-    const time=formatDistanceToNowStrict(new Date(this.props.pubDate),{addSuffix:true})
-
-        let { title, description, imgurl, link, pubDate, creator, source_name } = this.props;
+        let { title, description, imgurl, link, pubDate, creator, source_name } = props;
         return (
 
             <div className=" group max-w-sm mx-auto bg-white relative rounded-xl shadow-md overflow-hidden hover:shadow-2xl transition-all duration-300 ease-out hover:-translate-y-2 hover:border-[#4F7C82] h-full flex flex-col ">
@@ -16,7 +16,7 @@ export class Newsitems extends Component {
                     
                 </div>
                 <div className=' flex justify-between items-center transition-all duration-300 '>
-                        <span className='bg-gradient-to-t from-blue-500/70 to-transparent  text-black/80 text-xs px-2 py-1 transition  '>{ source_name }</span>
+                        <span className='bg-gradient-to-t from-blue-500/70 to-transparent  text-black/80 text-xs px-2 py-1 transition '>{ source_name }</span>
                     </div>
                 <div className='p-5 flex flex-col flex-grow'>
                     <h2 className='text-xl font-semibold text-gray-800 mb-2 line-clamp-2'>{ title }</h2>
@@ -37,7 +37,7 @@ export class Newsitems extends Component {
 
 
         )
-    }
+    
 }
 
 export default Newsitems
