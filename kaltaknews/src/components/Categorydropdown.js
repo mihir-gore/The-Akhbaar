@@ -71,16 +71,16 @@ const handleSelect = (cat) => {
 return (
 
     <div className="relative" ref={ menuRef }>
-        <button className='text-gray-600 hover:text-blue-600 transition' onClick={ toggleDropdown }>
+        <button className='text-gray-700 dark:text-gray-100 hover:text-blue-600 transition cursor-pointer' onClick={ toggleDropdown }>
             Categories
         </button>
         {
             open && (
-                <div className='absolute mt-2 w-48 bg-white rounded-lg shadow-lg z-50 w-48 max-h-100 overflow-y-auto  rounded-lg shadow-lg z-50 animate-fadeIn'>
+                <div className='absolute mt-2 w-48 bg-white rounded-lg shadow-lg z-50 w-48 max-h-100 overflow-y-auto  rounded-lg shadow-lg z-50 animate-fadeIn text-gray-700 dark:text-gray-100 '>
                     <ul className='py-2'>
                         { categories.map((cat) => (
                             <li key={ cat }>
-                                <button onClick={ () => handleSelect(cat) } className='block w-full text-left px-4 py-1 text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition'>
+                                <button onClick={ () => handleSelect(cat) } className='block w-full text-left px-4 py-1 text-gray-700 dark:text-gray-900  cursor-pointer hover:bg-gray-100 hover:text-blue-600 transition'>
                                     { cat }
                                 </button>
                             </li>
