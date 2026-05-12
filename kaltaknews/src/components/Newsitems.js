@@ -1,18 +1,16 @@
 import React,{useState} from 'react'
 import {formatDistanceToNowStrict} from 'date-fns'
-    
+import fallbackimg from "../images/image.png";
 
 const Newsitems = (props) => {  
     
-
     const time=formatDistanceToNowStrict(new Date(props.pubDate),{addSuffix:true})
-
 
         let { title, description, imgurl, link, pubDate, creator, source_name } = props;
         return (
             <div className=" group max-w-sm mx-auto  relative rounded-xl shadow-md bg-white dark:bg-[#1E293B] overflow-hidden hover:shadow-2xl transition-all duration-300 ease-out hover:-translate-y-2 hover:border-[#4F7C82] h-full flex flex-col ">
                 <div className='relative overflow-hidden'>
-                    <img className='w-full h-48 object-cover transition-all duration-500 ease-out group-hover:scale-110 group-hover:brightness-90' src={ imgurl } alt="Card Image" />
+                    <img className='w-full h-48 object-cover transition-all duration-500 ease-out group-hover:scale-110 group-hover:brightness-90' src={ imgurl } onError={(e)=>{ e.target.src=fallbackimg;}} alt="Card Image" />
                     
                 </div>
                 <div className=' flex justify-between items-center transition-all duration-300 '>
