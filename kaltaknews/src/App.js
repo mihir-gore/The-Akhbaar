@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 const App = () => {
  
 const [darkMode, setDarkMode] = useState(false);
+   
   return (
     <div className={ darkMode ? "dark" : "" }>
     <BrowserRouter>
@@ -14,6 +15,7 @@ const [darkMode, setDarkMode] = useState(false);
       <Routes>
         <Route path="/" element={ <News category="top" /> } />
         <Route path="/category/:category" element={ <News  /> } />
+        <Route path="/search/:keyword" element={<News />} />
       </Routes>
 
     </BrowserRouter>

@@ -9,13 +9,13 @@ import "react-loading-skeleton/dist/skeleton.css";
 import SkeletonCard from "./SkeletonCard";
 import { APIKEY } from "../config";
 
-const News = ({ category: propCategory }) => {
+const News = ({ category: propCategory}) => {
   const [results, setResults] = useState([]);
   const [nextPage, setNextPage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const { category: routeCategory } = useParams();
-  const category = routeCategory || propCategory;
+  const { category: routeCategory, keyword } = useParams();
+  const category = routeCategory || propCategory || "top";
 
 
   const fetchInitialNews = async () => {
@@ -23,7 +23,7 @@ const News = ({ category: propCategory }) => {
       setError(null);
       setLoading(true);
       setResults([]);
-      const url = `https://newsdata.io/api/1/latest?apikey=${APIKEY}&country=in&language=en,hi&category=${category}`;
+      const url = `https://newsdata.io/api/1/latest?apikey=${APIKEY}&country=in&language=en,hi&${keyword?`q=${keyword}`: `category=${category}`}`;
       const res = await fetch(url);
       if (!res.ok) {
         throw new Error("Failed to fetch news! Network response was not ok.");
@@ -46,8 +46,7 @@ const News = ({ category: propCategory }) => {
     if (loading || !nextPage) return;
     setLoading(true);
     try {
-      let url = `https://newsdata.io/api/1/latest?apikey=${APIKEY}&country=in&language=en,hi&category=${category}&page=${nextPage}`;
-      let res = await fetch(url);
+      let res = await fetch(`https://newsdata.io/api/1/latest?apikey=${APIKEY}&country=in&language=en,hi&${keyword  ? `q=${encodeURIComponent(keyword)}`  : `category=${category}`}&page=${nextPage}`);
       if (!res.ok) {
         throw new Error("Failed to load more news");
       }
@@ -88,10 +87,9 @@ const News = ({ category: propCategory }) => {
       top: 0,
       behavior: "smooth"
     });
-
-    document.title = `${category.charAt(0).toUpperCase() + category.toString().toLowerCase().slice(1)} - KalTakNews`;
-    fetchInitialNews();
-  }, [category]);
+     document.title = keyword ? `${keyword} News - KalTakNews`: `${category.charAt(0).toUpperCase() +category.slice(1).toLowerCase()} - KalTakNews`;    
+      fetchInitialNews();
+  }, [category,keyword]);
 
   if (error) {
     return (
@@ -105,9 +103,7 @@ const News = ({ category: propCategory }) => {
     <>
       <div className="bg-white dark:bg-[#0F172A] text-gray-800 dark:text-gray-100">
         <h1 className="text-3xl bg-white dark:bg-[#0F172A] text-gray-800 dark:text-gray-100  py-4 ml-9  flex justify-center align-middle ">
-          { category.toString().charAt(0).toUpperCase() +
-            category.toString().slice(1) }{ " " }
-          News
+          {keyword ? `Search Results for "${keyword}"`: `${category.charAt(0).toUpperCase() + category.slice(1)} News`}
         </h1>
       </div>
 
