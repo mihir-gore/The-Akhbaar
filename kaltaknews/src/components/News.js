@@ -1,5 +1,5 @@
 import fallbackimg from "../images/image.png";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import Newsitems from "./Newsitems";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { set } from "date-fns";
@@ -8,22 +8,26 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import SkeletonCard from "./SkeletonCard";
 import { APIKEY } from "../config";
+import { motion, stagger } from "framer-motion";
+import Sortdropdown from "./Sortdropdown";
 
-const News = ({ category: propCategory}) => {
+const News = ({ category: propCategory, sortBy  }) => {
   const [results, setResults] = useState([]);
   const [nextPage, setNextPage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { category: routeCategory, keyword } = useParams();
   const category = routeCategory || propCategory || "top";
-
+  const [loadingMore, setLoadingMore] = useState(false);
+  
+  
 
   const fetchInitialNews = async () => {
     try {
       setError(null);
       setLoading(true);
       setResults([]);
-      const url = `https://newsdata.io/api/1/latest?apikey=${APIKEY}&country=in&language=en,hi&${keyword?`q=${keyword}`: `category=${category}`}`;
+      const url = `https://newsdata.io/api/1/latest?apikey=${APIKEY}&size=9&country=in&language=en,hi&sort=${sortBy || "pubdateasc"}&${keyword ? `q=${keyword}` : `category=${category}`}`;
       const res = await fetch(url);
       if (!res.ok) {
         throw new Error("Failed to fetch news! Network response was not ok.");
@@ -44,14 +48,14 @@ const News = ({ category: propCategory}) => {
 
   const loadMore = async () => {
     if (loading || !nextPage) return;
-    setLoading(true);
+    setLoadingMore(true);
     try {
-      let res = await fetch(`https://newsdata.io/api/1/latest?apikey=${APIKEY}&country=in&language=en,hi&${keyword  ? `q=${encodeURIComponent(keyword)}`  : `category=${category}`}&page=${nextPage}`);
+      let res = await fetch(`https://newsdata.io/api/1/latest?apikey=${APIKEY}&size=9&country=in&language=en,hi&sort=${sortBy || "pubdateasc"}&${keyword ? `q=${encodeURIComponent(keyword)}` : `category=${category}`}&page=${nextPage}`);
       if (!res.ok) {
         throw new Error("Failed to load more news");
       }
       let data = await res.json();
-      
+
       if (data.status === "error") {
         throw new Error(data.message);
       }
@@ -78,7 +82,7 @@ const News = ({ category: propCategory}) => {
     } catch (error) {
       setError(error.message || "An error occurred while fetching news.");
     } finally {
-      setLoading(false);
+      setLoadingMore(false);
     };
   };
 
@@ -87,9 +91,10 @@ const News = ({ category: propCategory}) => {
       top: 0,
       behavior: "smooth"
     });
-     document.title = keyword ? `${keyword} News - KalTakNews`: `${category.charAt(0).toUpperCase() +category.slice(1).toLowerCase()} - KalTakNews`;    
-      fetchInitialNews();
-  }, [category,keyword]);
+    document.title = keyword ? `${keyword} News - KalTakNews` : `${category.charAt(0).toUpperCase() + category.slice(1).toLowerCase()} - KalTakNews`;
+    fetchInitialNews();
+  }, [category, keyword, sortBy]);
+
 
   if (error) {
     return (
@@ -100,72 +105,77 @@ const News = ({ category: propCategory}) => {
       </div>
     )
   } return (
-    <>
+    <motion.div className="min-h-screen" initial={ { opacity: 0, y: 20 } } animate={ { opacity: 1, y: 0 } }
+      exit={ { opacity: 0, y: -20 } } transition={ { duration: 0.35 } }>
+
       <div className="bg-white dark:bg-[#0F172A] text-gray-800 dark:text-gray-100">
         <h1 className="text-3xl bg-white dark:bg-[#0F172A] text-gray-800 dark:text-gray-100  py-4 ml-9  flex justify-center align-middle ">
-          {keyword ? `Search Results for "${keyword}"`: `${category.charAt(0).toUpperCase() + category.slice(1)} News`}
+          { keyword ? `Search Results for "${keyword}"` : `${category.charAt(0).toUpperCase() + category.slice(1)} News` }
         </h1>
       </div>
-
+      
       <div className=" h-[2px] bg-blue-50 w-full "></div>
 
-      { loading ? (
-        <div
-          className=" bg-white dark:bg-[#0F172A] grid p-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8  "
-        >
-          { [...Array(6)].map((_, i) => (
-            <SkeletonCard key={ i } />
-          )) }
-        </div>
-      ) : (
-        <InfiniteScroll
-          dataLength={ results.length }
-          next={ loadMore }
-          hasMore={ !!nextPage }
-          loader={
-            <div
-              className=" bg-white dark:bg-[#0F172A] grid p-6 grid-cols-1 sm:grid-cols-2   lg:grid-cols-3  gap-8 "
-            >
-              { [...Array(6)].map((_, i) => (
-                <SkeletonCard key={ i } />
-              )) }
-            </div>
-          }
-        >
-          <div className="grid p-6 grid-cols-1 bg-[#F8FAFC] dark:bg-[#0F172A] sm:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
-            { results.map((element) => {
-              return (
-                <Newsitems
-                  key={ element.article_id }
-                  title={ element.title }
-                  description={
-                    !element.description
-                      ? "To learn more about this news, click the button below."
-                      : element.description
-                  }
-                  imgurl={
-                    element.image_url && element.image_url.trim() !== ""
-                      ? element.image_url
-                      : fallbackimg
-                  }
-                  link={ element.link }
-                  pubDate={ element.pubDate }
-                  creator={ !element.creator ? "Unknown" : element.creator }
-                  source_name={ element.source_name }
-                />
-              );
-            }) }
-            { !loading && results.length === 0 && (
-              <div className="text-center py-20">
-                <h2 className="col-span-full text-gray-700 dark:text-gray-100 text-2xl font-bold">
-                  No News Found.
-                </h2>
-              </div>
-            ) }
+      {
+        loading ? (
+          <div
+            className=" bg-white dark:bg-[#0F172A] grid p-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8  "
+          >
+            { [...Array(6)].map((_, i) => (
+              <SkeletonCard key={ i } />
+            )) }
           </div>
-        </InfiniteScroll>
-      ) }
-    </>
+        ) : (
+          <InfiniteScroll
+            dataLength={ results.length }
+            next={ loadMore }
+            hasMore={ !!nextPage }
+            loader={
+              <div
+                className=" bg-white dark:bg-[#0F172A] grid p-6 grid-cols-1 sm:grid-cols-2   lg:grid-cols-3  gap-8 "
+              >
+                { [...Array(6)].map((_, i) => (
+                  <SkeletonCard key={ i } />
+                )) }
+              </div>
+            }
+          >
+            <motion.div initial="hidden" animate="visible" variants={ { hidden: {}, visible: { transition: { staggerChildren: 0.20 } } } } className="grid p-6 grid-cols-1 bg-[#F8FAFC] dark:bg-[#0F172A] sm:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
+              { results.map((element) => {
+                return (
+                  <Newsitems
+                    key={ element.article_id }
+                    title={ element.title }
+                    description={
+                      !element.description
+                        ? "To learn more about this news, click the button below."
+                        : element.description
+                    }
+                    imgurl={
+                      element.image_url && element.image_url.trim() !== ""
+                        ? element.image_url
+                        : fallbackimg
+                    }
+                    link={ element.link }
+                    pubDate={ element.pubDate }
+                    creator={ !element.creator ? "Unknown" : element.creator }
+                    source_name={ element.source_name }
+                  />
+                );
+              }) }
+              { !loading && results.length === 0 && (
+                <div className="text-center py-20">
+                  <h2 className="col-span-full text-gray-700 dark:text-gray-100 text-2xl font-bold">
+                    No News Found.
+                  </h2>
+                </div>
+              ) }
+            </motion.div>
+          </InfiniteScroll>
+        )
+      }
+
+    </motion.div >
   );
 };
 
