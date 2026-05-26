@@ -11,6 +11,7 @@ import Sortdropdown from "./Sortdropdown";
 
 
 
+
 const Navbar = ({ darkMode, setDarkMode, sortBy, setSortBy }) => {
 
   const navigate = useNavigate();
@@ -78,13 +79,15 @@ const Navbar = ({ darkMode, setDarkMode, sortBy, setSortBy }) => {
             
             <div className="flex items-center justify-between space-x-1  text-gray-700 dark:text-gray-100">
 
-              <svg xmlns="http://w3.org" class="cursor-none " viewBox="0 0 24 24" width="24" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg xmlns="http://w3.org" className="cursor-none " viewBox="0 0 24 24" width="24" height="21" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M4 6h12M4 12h8M4 18h8M19 10v10m0 0l-3-3m3 3l3-3" />
               </svg>
 
                 <Sortdropdown sortBy={sortBy} setSortBy={setSortBy}/>
               
             </div>
+
+            <Link to="/bookmarks" className="text-gray-700 dark:text-gray-100 hover:text-blue-600 transition">Bookmarks </Link>
 
           </div>
 

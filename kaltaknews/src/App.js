@@ -5,6 +5,7 @@ import News from './components/News'
 import { useLocation, Routes, Route } from 'react-router-dom'
 import{AnimatePresence} from "framer-motion";
 import { set } from 'date-fns';
+import Bookmarks from './pages/Bookmarks';
 
 const App = () => {
  
@@ -14,7 +15,7 @@ const [sortBy, setSortBy] = useState("pubdatedesc");
 
 useEffect(() => {
   setSortBy("pubdatedesc");
-}, [location.pathname]);
+}, [location.pathname]);  
 
   return (
     <div className={ darkMode ? "dark" : "" }>
@@ -24,6 +25,7 @@ useEffect(() => {
         <Route path="/" element={ <News category="top" sortBy={sortBy} /> } />
         <Route path="/category/:category" element={ <News sortBy={sortBy}  /> } />
         <Route path="/search/:keyword" element={<News sortBy={sortBy} />} />
+        <Route path="/bookmarks" element={<Bookmarks />} />
       </Routes>
       </AnimatePresence>
     </div>

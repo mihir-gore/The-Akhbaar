@@ -7,94 +7,15 @@ import { useParams } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import SkeletonCard from "./SkeletonCard";
-import { APIKEY } from "../config";
 import { motion, stagger } from "framer-motion";
 import Sortdropdown from "./Sortdropdown";
+import   useNews  from "../Hooks/useNews";
 
 const News = ({ category: propCategory, sortBy  }) => {
-  const [results, setResults] = useState([]);
-  const [nextPage, setNextPage] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  
   const { category: routeCategory, keyword } = useParams();
   const category = routeCategory || propCategory || "top";
-  const [loadingMore, setLoadingMore] = useState(false);
-  
-  
-
-  const fetchInitialNews = async () => {
-    try {
-      setError(null);
-      setLoading(true);
-      setResults([]);
-      const url = `https://newsdata.io/api/1/latest?apikey=${APIKEY}&size=9&country=in&language=en,hi&sort=${sortBy || "pubdateasc"}&${keyword ? `q=${keyword}` : `category=${category}`}`;
-      const res = await fetch(url);
-      if (!res.ok) {
-        throw new Error("Failed to fetch news! Network response was not ok.");
-      }
-      const data = await res.json();
-      if (data.status === "error") {
-        throw new Error(data.message || "An error occurred while fetching news.");
-      }
-
-      setResults(Array.isArray(data.results) ? data.results : []);
-      setNextPage(data.nextPage || null);
-    } catch (error) {
-      setError(error.message || "An error occurred while fetching news.");
-    } finally {
-      setLoading(false);
-    };
-  }
-
-  const loadMore = async () => {
-    if (loading || !nextPage) return;
-    setLoadingMore(true);
-    try {
-      let res = await fetch(`https://newsdata.io/api/1/latest?apikey=${APIKEY}&size=9&country=in&language=en,hi&sort=${sortBy || "pubdateasc"}&${keyword ? `q=${encodeURIComponent(keyword)}` : `category=${category}`}&page=${nextPage}`);
-      if (!res.ok) {
-        throw new Error("Failed to load more news");
-      }
-      let data = await res.json();
-
-      if (data.status === "error") {
-        throw new Error(data.message);
-      }
-      setResults(prevResults => {
-        const combined = [
-          ...prevResults,
-          ...(Array.isArray(data.results)
-            ? data.results
-            : [])
-        ];
-        const uniqueArticles = [
-          ...new Map(
-            combined.map(article => [
-              article.article_id,
-              article
-            ])
-          ).values()
-        ];
-
-        return uniqueArticles;
-      });
-
-      setNextPage(data.nextPage || null);
-    } catch (error) {
-      setError(error.message || "An error occurred while fetching news.");
-    } finally {
-      setLoadingMore(false);
-    };
-  };
-
-  useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-    document.title = keyword ? `${keyword} News - KalTakNews` : `${category.charAt(0).toUpperCase() + category.slice(1).toLowerCase()} - KalTakNews`;
-    fetchInitialNews();
-  }, [category, keyword, sortBy]);
-
+  const {  results, error, nextPage, loading, loadingMore, loadMore } = useNews({ category, sortBy, keyword });
 
   if (error) {
     return (
@@ -160,6 +81,7 @@ const News = ({ category: propCategory, sortBy  }) => {
                     pubDate={ element.pubDate }
                     creator={ !element.creator ? "Unknown" : element.creator }
                     source_name={ element.source_name }
+                    article_id={ element.article_id }
                   />
                 );
               }) }
