@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
 import { formatDistanceToNowStrict } from 'date-fns'
 import fallbackimg from "../images/image.png";
 import { motion } from "framer-motion";
 import useBookmarks from '../Hooks/useBookmarks';
-import {Bookmark, BookmarkCheck, Share} from "lucide-react"; 
+import {Bookmark, BookmarkCheck, Share} from "lucide-react";
+import useHistory from '../Hooks/useHistory'; 
 
 const Newsitems = (props) => {
 
@@ -12,6 +12,7 @@ const Newsitems = (props) => {
 
     const { addBookmark, removeBookmark, isBookmarked } = useBookmarks();
     const bookmarked = isBookmarked(article_id);
+    const { addToHistory } = useHistory();
 
     const shareArticle = async () => {
         try {
@@ -37,7 +38,7 @@ const Newsitems = (props) => {
     };
 
     return (    
-        <motion.div variants={cardVariants} whileHover={{ scale: 1.03, y: -5 }} whileTap={{ scale: 0.90 }}transition={{type: "spring", stiffness: 300, damping: 20,  mass: 0.5},{ duration: 0.6, ease: "easeOut" } } initial={ { opacity: 0, y: 40 } } animate={ { opacity: 1, y: 0 } }  whileHover={{y:-10,scale: 1.02}} className=" group max-w-sm mx-auto  relative rounded-xl shadow-md bg-white dark:bg-[#1E293B] overflow-hidden hover:shadow-2xl transition-all duration-300 ease-out hover:-translate-y-2 hover:border-[#4F7C82] h-full flex flex-col ">
+        <motion.div variants={cardVariants} whileHover={{ scale: 1.03, y: -5 }} whileTap={{ scale: 0.90 }}transition={{type: "spring", stiffness: 300, damping: 20,  mass: 0.5}, { duration: 0.6, ease: "easeOut" } } initial={ { opacity: 0, y: 40 } } animate={ { opacity: 1, y: 0 } }  whileHover={{y:-10,scale: 1.02}} className=" group max-w-sm mx-auto  relative rounded-xl shadow-md bg-white dark:bg-[#1E293B] overflow-hidden hover:shadow-2xl transition-all duration-300 ease-out hover:-translate-y-2 hover:border-[#4F7C82] h-full flex flex-col ">
             <div className='relative overflow-hidden'>
                 <motion.img whileHover={{scale: 1.05}} transition={ {duration: 0.5} } className='w-full h-48 object-cover transition-all duration-500 ease-out group-hover:scale-110 group-hover:brightness-90' loading="lazy" src={ imgurl } onError={ (e) => { e.target.src = fallbackimg; } } alt="Card Image" />
 
@@ -60,7 +61,7 @@ const Newsitems = (props) => {
                 <div className='flex justify-between mt-auto bg'>
 
                     <p className='text-gray-700 dark:text-gray-100 text-xs '>~{ creator } <br /> { time }</p>
-                    <a className=" mt-auto " href={ link } target="_blank" rel="noopener noreferrer">
+                <a className=" mt-auto " href={ link } target="_blank" rel="noopener noreferrer" onClick={()=>addToHistory({ article_id, title, description, imgurl, link, pubDate, creator, source_name })}>
                         <button className='mt-auto bg-gradient-to-t from-blue-300 to-transparent text-black test-xs px-2 py-1 hover:bg-blue-200 rounded-md inset-0 bg-blue-400/70 scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100' > Read More</button>
                     </a>
                 </div>

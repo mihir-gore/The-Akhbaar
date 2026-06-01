@@ -4,8 +4,8 @@ import Navbar from './components/Navbar'
 import News from './components/News'
 import { useLocation, Routes, Route } from 'react-router-dom'
 import{AnimatePresence} from "framer-motion";
-import { set } from 'date-fns';
 import Bookmarks from './pages/Bookmarks';
+import History from './pages/History';
 
 const App = () => {
  
@@ -26,6 +26,7 @@ useEffect(() => {
         <Route path="/category/:category" element={ <News sortBy={sortBy}  /> } />
         <Route path="/search/:keyword" element={<News sortBy={sortBy} />} />
         <Route path="/bookmarks" element={<Bookmarks />} />
+        <Route path="/history" element={<History />} />
       </Routes>
       </AnimatePresence>
     </div>

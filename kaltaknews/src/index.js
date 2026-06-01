@@ -5,12 +5,15 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router';
 import BookmarkProvider from './Contexts/BookmarkContext';
+import HistoryProvider from './Contexts/HistoryContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
   <BookmarkProvider>
+    <HistoryProvider>
     <App />
+    </HistoryProvider>
   </BookmarkProvider>
   </BrowserRouter>
 );

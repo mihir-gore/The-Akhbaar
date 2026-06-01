@@ -1,11 +1,10 @@
-import React, { use, useState } from "react";
+import React, { useState } from "react";
 import Categorydropdown from "./Categorydropdown";
 import { useNavigate } from 'react-router-dom';
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import { set } from "date-fns";
 import videocam from "../images/videocam.png";
 import Sortdropdown from "./Sortdropdown";
 
@@ -87,9 +86,14 @@ const Navbar = ({ darkMode, setDarkMode, sortBy, setSortBy }) => {
               
             </div>
 
+            
             <Link to="/bookmarks" className="text-gray-700 dark:text-gray-100 hover:text-blue-600 transition">Bookmarks </Link>
+             
+             <Link to="/history" className="text-gray-700 dark:text-gray-100 hover:text-blue-600 transition">History </Link>
 
           </div>
+
+          
 
           {/* CTA */ }
           <div className="hidden md:block">
