@@ -18,8 +18,29 @@ const Navbar = ({ darkMode, setDarkMode, sortBy, setSortBy }) => {
   const { keyword } = useParams();
   const location = useLocation();
   const [search, setSearch] = useState(keyword || "");
+  const  [debouncedSearch, setDebouncedSearch] = useState(keyword || "");
+
+  useEffect(() => {
+     if(!debouncedSearch.trim())
+      return;
+    navigate(`/search/${debouncedSearch}`);
+  
+  }, [debouncedSearch]);
+
+
+  useEffect(()=>
+  {
+    const timer=setTimeout(() => {
+      setDebouncedSearch(search);
+    },2000);
+    return ()=>{
+      clearTimeout(timer);
+    }
+  },[search])
+
+  
   const toggleMenu = () => {
-    setIsOpen(prev => !prev);
+    setIsOpen(prev => !prev); 
   };
 
 
