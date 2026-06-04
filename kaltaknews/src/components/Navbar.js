@@ -7,7 +7,8 @@ import { useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import videocam from "../images/videocam.png";
 import Sortdropdown from "./Sortdropdown";
-
+import LogoHome from "../images/LogoHome.jpg";
+import logo512 from "../images/logo512.png";
 
 
 
@@ -63,11 +64,14 @@ const Navbar = ({ darkMode, setDarkMode, sortBy, setSortBy }) => {
         <div className="flex justify-between items-center h-16 ">
 
           {/* Logo */ }
-          <div className="flex justify-between items-center">
-            <img src={ videocam } alt="Logo" className=" mt-1 h-10 w-10" />
-            <h1 className="text-xl font-bold text-blue-600 cursor-pointer hover:shadow-2xl transition-all duration-300 ease-out hover:scale-110 ml-1  " onClick={ () => navigate("/") }>
-              KalTakNews
+          <div className="flex justify-between items-center dark:bg-[#0F172A]">
+           <a className="flex items-center justify-between hover:shadow-2xl transition-all duration-300 ease-out hover:scale-105" href="/" onClick={ () => navigate("/") }>
+             <img src={logo512 } alt="Logo" className="  ml-1  rounded mt-1 h-10 w-10" />
+           
+            <h1 className="text-xl font-bold dark:text-white cursor-pointer hover:shadow-2xl transition-all duration-300 ease-out hover:scale-110 ml-1  " >
+              KalTak<span className="text-blue-700 dark:text-white-100 dark:bg-[#0F172A]">News</span>
             </h1>
+            </a>
           </div>
 
           {/* Desktop Menu */ }
