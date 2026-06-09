@@ -6,13 +6,16 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router';
 import BookmarkProvider from './Contexts/BookmarkContext';
 import HistoryProvider from './Contexts/HistoryContext';
+import { AuthProvider } from './Contexts/AuthContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
   <BookmarkProvider>
     <HistoryProvider>
+      <AuthProvider>
     <App />
+      </AuthProvider>
     </HistoryProvider>
   </BookmarkProvider>
   </BrowserRouter>
