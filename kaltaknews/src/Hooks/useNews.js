@@ -12,7 +12,7 @@ const useNews = ({ category, sortBy, keyword }) => {
   const [loadingMore, setLoadingMore] = useState(false);
  
   const buildURL=(page=null)=>{
-
+      
       return `https://newsdata.io/api/1/latest?apikey=${APIKEY}&size=9&country=in&language=en,hi&sort=${sortBy || "pubdateasc"}&${keyword ? `q=${keyword}` : `category=${category}`}${page ? `&page=${page}` : ""}`;
 
   }

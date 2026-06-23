@@ -1,4 +1,5 @@
 import {useState} from 'react';
+import axios from "axios";
 import {createUserWithEmailAndPassword} from 'firebase/auth';
 import {auth} from '../firebase';
 import { motion } from "framer-motion";
@@ -16,7 +17,9 @@ const Signup=()=>{
    setLoading(true);
    setError('');
    try{
-    await createUserWithEmailAndPassword(auth,email,password);
+    const userCredentials=await createUserWithEmailAndPassword(auth,email,password);
+  
+    await axios.post("http://localhost:5000/api/users",{firebase_uid: userCredentials.user.uid,email: userCredentials.user.email} )
     navigate(from, { replace: true });
    }catch(error){
     setError(error.message);

@@ -1,13 +1,15 @@
-import useHistory from "../Hooks/useHistory";
 import Newsitems from "../components/Newsitems";
 import EmptyState from "../components/EmptyState";
 import {FileClock } from "lucide-react";
+import { HistoryContext } from "../Contexts/HistoryContext";
+import { useContext } from "react";
 
 const History = () => {
 
-  const {history,clearHistory} = useHistory();
+  const {history,clearHistory} = useContext(HistoryContext);
+  console.log(history);
    
-  if(history.length === 0){
+  if(history.length === 0){ 
         return(
             <div className="mt-9">
             <EmptyState title="No History Yet"
@@ -44,7 +46,7 @@ const History = () => {
 
       </div>
 
-       <button onClick={ clearHistory } className=" ml-9 mt-9  px-4   py-2   bg-red-500   text-white   rounded-lg hover:bg-red-600 transition-colors duration-300 ">
+       <button onClick={clearHistory} className=" ml-9 mt-9  px-4   py-2   bg-red-500   text-white   rounded-lg hover:bg-red-600 transition-colors duration-300 ">
           Clear History
 
         </button>

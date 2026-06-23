@@ -24,12 +24,13 @@ const Bookmarks = () => {
             Bookmarked Articles </h1>
            <div className="grid p-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               
-            {bookmarks.map(article=>(
-                <Newsitems key={article.article_id} 
-                {...article}/>
-            ))}
-           </div>
-           </>
+                {bookmarks.map(article=>(
+                    <Newsitems key={article.article_id} 
+                    {...article}/>
+                ))}
+            </div>
+            </>
+
 
      )
 }

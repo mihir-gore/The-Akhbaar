@@ -64,6 +64,7 @@ const News = ({ category: propCategory, sortBy  }) => {
             <motion.div initial="hidden" animate="visible" variants={ { hidden: {}, visible: { transition: { staggerChildren: 0.20 } } } } className="grid p-6 grid-cols-1 bg-[#F8FAFC] dark:bg-[#0F172A] sm:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
               { results.map((element) => {
                 return (
+              
                   <Newsitems
                     key={ element.article_id }
                     title={ element.title }
@@ -78,7 +79,7 @@ const News = ({ category: propCategory, sortBy  }) => {
                         : fallbackimg
                     }
                     link={ element.link }
-                    pubDate={ element.pubDate }
+                    pubDate={ element.pubDate || element.created_at }
                     creator={ !element.creator ? "Unknown" : element.creator }
                     source_name={ element.source_name }
                     article_id={ element.article_id }
