@@ -4,21 +4,26 @@ import { motion } from "framer-motion";
 import useBookmarks from '../Hooks/useBookmarks';
 import {Bookmark, BookmarkCheck, Share} from "lucide-react";
 import useHistory from '../Hooks/useHistory'; 
-import axios from 'axios';
 import { auth } from '../firebase';
 import { HistoryContext } from '../Contexts/HistoryContext';
-    import { useContext } from 'react';
+import { useContext, useState } from 'react';
+import { WandSparkles } from 'lucide-react';
+
+
 
 const Newsitems = (props) => {
     
     const dateValue = props.pubDate || props.created_at || props.viewed_at;
     const time = dateValue ? formatDistanceToNowStrict(new Date(dateValue), { addSuffix: true }) : " Unknown Date"
-    let { id,article_id,title, description, imgurl,image_url, link,article_url, pubDate,viewed_at, creator, source_name } = props;
+    let { id,article_id,title, description, imgurl,image_url, link,article_url, pubDate,viewed_at, creator, source_name ,onGenerateSummary,category} = props;
     const image= imgurl || image_url;
     const url=link || article_url;
     const { addBookmark, removeBookmark, isBookmarked } = useBookmarks();
     const bookmarked = isBookmarked(article_id);
     const {addtoHistory} = useHistory();
+   
+    
+   
     const shareArticle = async () => {
         try {
             if (navigator.share) {
@@ -51,11 +56,13 @@ const Newsitems = (props) => {
             <div className=' flex justify-between items-center transition-all duration-300 '>
                 <span className='bg-gradient-to-t from-blue-500/70 to-transparent  text-black/80 text-xs px-2 py-1 transition '>{ source_name }</span>
                
-                <button onClick={ shareArticle }className=" ml-auto p-2 rounded-full transition-colors duration-300 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-blue-400 " ><Share size={20}/></button>
-                <button onClick={()=> {if(bookmarked){ removeBookmark(id) } else { addBookmark({ article_id, title, description, imgurl:image, link:url, pubDate, creator, source_name }) } }} className="p-2 rounded-full transition-colors duration-300 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-blue-400 " >
+                <button title="Share" onClick={ shareArticle }className=" ml-auto p-2 rounded-full transition-colors duration-300 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-blue-400 " ><Share size={20}/></button>
+                <button title="Bookmark" onClick={()=> {if(bookmarked){ removeBookmark(id) } else { addBookmark({ article_id, title, description, imgurl:image, link:url, pubDate, creator, source_name, category }) } }} className="p-2 rounded-full transition-colors duration-300 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-blue-400 " >
                     {bookmarked?<BookmarkCheck size={20}/>:<Bookmark size={20}/>}
                     </button>
+                
 
+                 <button title="Generate AI Summary" className="p-2 rounded-xl transition-colors duration-300 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-blue-400 " onClick={()=>onGenerateSummary ({title,description})}> <WandSparkles size={20} className="transition-all duration-300 hover:text-cyan-400 hover:scale-110" /></button>
 
             </div>
             <div className='p-5 flex flex-col flex-grow'>
@@ -66,14 +73,14 @@ const Newsitems = (props) => {
                 <div className='flex justify-between mt-auto bg'>
 
                     <p className='text-gray-700 dark:text-gray-100 text-xs '>~{ creator } <br /> { time }</p>
-                <a className=" mt-auto " href={url} target="_blank" rel="noopener noreferrer" onClick={()=>{addtoHistory({ article_id, title, description, imgurl:image, link:url,source_name,pubDate })}}>
+                <a className=" mt-auto " href={url} target="_blank" rel="noopener noreferrer" onClick={()=>{addtoHistory({ article_id, title, description, imgurl:image, link:url,source_name,pubDate, category })}}>
                         <button className='mt-auto bg-gradient-to-t from-blue-300 to-transparent text-black test-xs px-2 py-1 hover:bg-blue-200 rounded-md inset-0 bg-blue-400/70 scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100' > Read More</button>
                     </a>
                 </div>
             </div>
+
+
         </motion.div>
-
-
 
 
     )

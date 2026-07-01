@@ -39,7 +39,8 @@ const HistoryProvider = ({ children }) => {
                             image_url:article.imgurl,
                             article_url:article.link,
                             source_name:article.source_name,
-                            
+                            category:article.category?.[1] || article.category?.[0]
+
                         
                 }
           const response= await axios.post("http://localhost:5000/api/history",

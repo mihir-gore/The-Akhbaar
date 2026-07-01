@@ -30,7 +30,6 @@ const useNews = ({ category, sortBy, keyword }) => {
       if (data.status === "error") {
         throw new Error(data.message || "An error occurred while fetching news.");
       }
-
       setResults(Array.isArray(data.results) ? data.results : []);
       setNextPage(data.nextPage || null);
     } catch (error) {

@@ -10,12 +10,37 @@ import SkeletonCard from "./SkeletonCard";
 import { motion, stagger } from "framer-motion";
 import Sortdropdown from "./Sortdropdown";
 import   useNews  from "../Hooks/useNews";
+import axios from "axios";
+import AISummary from "./AISummary";
 
 const News = ({ category: propCategory, sortBy  }) => {
   
   const { category: routeCategory, keyword } = useParams();
   const category = routeCategory || propCategory || "top";
   const {  results, error, nextPage, loading, loadingMore, loadMore } = useNews({ category, sortBy, keyword });
+
+   const [summary,setSummary]=useState(null);
+    const[loadingSummary,setLoadingSummary]=useState(false);
+    const[showSummary,setShowSummary]=useState(false);
+
+     const generateSummary=async(article)=>{
+        
+            try{
+                setLoadingSummary(true);
+                setShowSummary(true);
+                const response=await axios.post("http://localhost:5000/api/ai/summarize",{
+                    title:article.title,description:article.description
+
+                })
+                setSummary(response.data.summary)
+            }catch(error){
+                console.log(error)
+                setSummary("Unable to Generate Summary")
+          }finally{
+            setLoadingSummary(false);
+
+          }
+    }
 
   if (error) {
     return (
@@ -83,8 +108,12 @@ const News = ({ category: propCategory, sortBy  }) => {
                     creator={ !element.creator ? "Unknown" : element.creator }
                     source_name={ element.source_name }
                     article_id={ element.article_id }
+                    onGenerateSummary={generateSummary}
+                    category={element.category}
                   />
+                  
                 );
+
               }) }
               { !loading && results.length === 0 && (
                 <div className="text-center py-20">
@@ -94,6 +123,8 @@ const News = ({ category: propCategory, sortBy  }) => {
                 </div>
               ) }
             </motion.div>
+            <AISummary isOpen={showSummary} summary={summary} loading={loadingSummary} onClose={() => setShowSummary(false)} />
+
           </InfiniteScroll>
         )
       }
