@@ -1,6 +1,7 @@
 import { useEffect, useState, createContext } from "react";
 import axios from "axios";
 import { useAuth } from "./AuthContext";
+import { toast } from "sonner";
 
 export const HistoryContext = createContext();
 
@@ -16,7 +17,7 @@ const HistoryProvider = ({ children }) => {
             try {
                 const response = await axios.get(`http://localhost:5000/api/history/${user.uid}`)
                 setHistory(response.data);
-                console.log(response.data)
+            
             }
             catch (error) {
                 console.log(error);
@@ -60,9 +61,11 @@ const HistoryProvider = ({ children }) => {
             if (!user) return;
             await axios.delete(`http://localhost:5000/api/history/clear/${user.uid}`)
             setHistory([]);
+            toast.success("Reading History Cleared!")
         }
         catch (error) {
             console.log(error)
+        toast.error("Failed to Clear History.")
         }
     }
     return (

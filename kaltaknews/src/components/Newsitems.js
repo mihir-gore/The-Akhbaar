@@ -8,6 +8,8 @@ import { auth } from '../firebase';
 import { HistoryContext } from '../Contexts/HistoryContext';
 import { useContext, useState } from 'react';
 import { WandSparkles } from 'lucide-react';
+import { toast } from "sonner";
+
 
 
 
@@ -34,10 +36,11 @@ const Newsitems = (props) => {
                 })
             } else {
                 await navigator.clipboard.writeText(link);
-                alert("Link Copied To Clipboard");
+                toast.success("Link Copied To Clipboard!")
             }
         } catch (error) {
             console.log("Sharing Failed", error)
+            toast.error("Failed to Share.")
         }
     }
 

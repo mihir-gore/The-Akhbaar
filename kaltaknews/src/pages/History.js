@@ -7,7 +7,6 @@ import { useContext } from "react";
 const History = () => {
 
   const {history,clearHistory} = useContext(HistoryContext);
-  console.log(history);
    
   if(history.length === 0){ 
         return(

@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "./AuthContext";
+import { toast } from "sonner";
 
 export const BookmarkContext = createContext();
 
@@ -42,9 +43,10 @@ const BookmarkProvider = ({ children }) => {
                 const response=await axios.post("http://localhost:5000/api/bookmarks",bookmarkData)
            
                  setBookmarks(prev=>[response.data,...prev])
-            
+                   toast.success("Added to Bookmarks!")
                 }catch (error) {
                   console.error(error);
+                  toast.error("Failed to Add Bookmark.")
                  }
         }
     
@@ -55,9 +57,10 @@ const BookmarkProvider = ({ children }) => {
                 await axios.delete(`http://localhost:5000/api/bookmarks/${bookmarkId}`)
                  
         setBookmarks(prev => prev.filter(bookmark => bookmark.id !== bookmarkId));
-                
+             toast.success("Removed from Bookmarks!")   
             }catch(error){
-                console.error(error)    
+                console.error(error) 
+                toast.error("Failed to Remove Bookmark.")   
             }
     }   
 

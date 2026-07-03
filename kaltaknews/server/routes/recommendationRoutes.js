@@ -1,0 +1,6 @@
+const express= require("express")
+const router =express.Router();
+
+const{getRecommendations}=require("../controllers/recommendationController")
+router.get("/:firebase_uid", getRecommendations)
+module.exports=router;

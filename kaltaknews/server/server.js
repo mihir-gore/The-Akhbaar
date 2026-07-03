@@ -5,6 +5,7 @@ const userRoutes = require("./routes/userRoutes")
 const bookmarkRoutes=require("./routes/bookmarkRoutes")
 const historyRoutes=require("./routes/historyRoutes")
 const aiRoutes=require("./routes/aiRoutes")
+const recommendationRoutes=require("./routes/recommendationRoutes")
 const app = express();
 const cors=require("cors");
 app.use(cors());
@@ -13,6 +14,7 @@ app.use("/api/users", userRoutes)
 app.use("/api/bookmarks",bookmarkRoutes)
 app.use("/api/history",historyRoutes)    
 app.use("/api/ai",aiRoutes)
+app.use("/api/recommendations",recommendationRoutes)
 app.get("/", async (req, res) => {
     try {
 
