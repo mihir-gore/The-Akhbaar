@@ -70,12 +70,12 @@ const News = ({ category: propCategory, sortBy }) => {
       <div className=" h-[2px] bg-blue-50 w-full "></div>
 
       { recommendArticles.length > 0 && (
-        <>
-          <h2 className="flex justify-center items-center text-2xl  m-4 mb-6 text-gray-800 dark:text-white">
+        <div className="bg-white dark:bg-[#0F172A] text-gray-800 dark:text-gray-100 p-6">
+          <h2 className="flex justify-center items-center text-2xl  m-4 mb-6 bg-white dark:bg-[#0F172A] text-gray-800 dark:text-gray-100">
             ⭐ Recommended For You
           </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-10">
+          <div className=" bg-white dark:bg-[#0F172A] text-gray-800 dark:text-gray-100 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-10">
 
             { recommendArticles.map(article => (
 
@@ -94,7 +94,7 @@ const News = ({ category: propCategory, sortBy }) => {
 
             <div className=" h-[2px] bg-blue-50 w-full "></div>
             <AIChat articles={results} />
-        </>
+        </div>
       ) }
 
       {
