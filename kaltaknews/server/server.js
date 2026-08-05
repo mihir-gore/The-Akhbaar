@@ -1,3 +1,4 @@
+
 require("dotenv").config({path: "../.env"});
 const express = require('express');
 const pool = require('./db/database');

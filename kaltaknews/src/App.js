@@ -10,6 +10,7 @@ import Signup from './pages/Signup';
 import Login from './pages/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 import { Toaster, toast } from "sonner";
+import AIChat from './components/AIChat';
 const App = () => {
 
   const [darkMode, setDarkMode] = useState(false);
@@ -35,6 +36,7 @@ const App = () => {
           <Route path="/login" element={ <Login /> } />
         </Routes>
       </AnimatePresence>
+      
     </div>
   )
 

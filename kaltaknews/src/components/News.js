@@ -14,6 +14,7 @@ import axios from "axios";
 import AISummary from "./AISummary";
 import useRecommendations from "../Hooks/useRecommendations";
 import { toast } from "sonner";
+import AIChat from "./AIChat";
 
 
 const News = ({ category: propCategory, sortBy }) => {
@@ -92,6 +93,7 @@ const News = ({ category: propCategory, sortBy }) => {
             </h1>
 
             <div className=" h-[2px] bg-blue-50 w-full "></div>
+            <AIChat articles={results} />
         </>
       ) }
 
