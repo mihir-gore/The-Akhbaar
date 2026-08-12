@@ -15,6 +15,7 @@ import AISummary from "./AISummary";
 import useRecommendations from "../Hooks/useRecommendations";
 import { toast } from "sonner";
 import AIChat from "./AIChat";
+import HeroStory from "../components/HeroStory";
 
 
 const News = ({ category: propCategory, sortBy }) => {
@@ -58,44 +59,80 @@ const News = ({ category: propCategory, sortBy }) => {
       </div>
     )
   } return (
-    <motion.div className="min-h-screen" initial={ { opacity: 0, y: 20 } } animate={ { opacity: 1, y: 0 } }
+    <motion.div className="min-h-screen bg-white dark:bg-[#0F172A]" initial={ { opacity: 0, y: 20 } } animate={ { opacity: 1, y: 0 } }
       exit={ { opacity: 0, y: -20 } } transition={ { duration: 0.35 } }>
 
       <div className="bg-white dark:bg-[#0F172A] text-gray-800 dark:text-gray-100">
-        <h1 className="text-3xl bg-white dark:bg-[#0F172A] text-gray-800 dark:text-gray-100  py-4 ml-9  flex justify-center align-middle ">
-          { keyword ? `Search Results for "${keyword}"` : `${category.charAt(0).toUpperCase() + category.slice(1)} News` }
-        </h1>
+        { !loading && results.length > 0 && (
+          <div className="px-6 pt-2">
+            <HeroStory articles={ results.slice(0, 5) } />
+          </div>
+        ) }
       </div>
 
-      <div className=" h-[2px] bg-blue-50 w-full "></div>
-
       { recommendArticles.length > 0 && (
-        <div className="bg-white dark:bg-[#0F172A] text-gray-800 dark:text-gray-100 p-6">
-          <h2 className="flex justify-center items-center text-2xl  m-4 mb-6 bg-white dark:bg-[#0F172A] text-gray-800 dark:text-gray-100">
-            ⭐ Recommended For You
-          </h2>
+        <div className="mt-3  bg-white dark:bg-[#0F172A] text-gray-800 dark:text-gray-100 p-6 ">
 
-          <div className=" bg-white dark:bg-[#0F172A] text-gray-800 dark:text-gray-100 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-10">
+          <div className=" h-px mb-6 flex bg-gradient-to-r from-slate-200 via-slate-100 to-transparent" />
+
+          <div className="mb-8 px-6">
+
+            <p className="uppercase tracking-[0.3em] ml-1 text-base text-blue-600 font-semibold">
+              PERSONALIZED
+            </p>
+
+            <h2 className="font-plus-jakarta text-2xl mt-1 font-semibold text-slate-900 dark:text-white">
+              Recommended for You
+            </h2>
+
+            <p className="text-slate-500 mb-2">
+              Personalized stories selected from your interests,reading history, and trending topics.
+            </p>
+
+          </div>
+
+
+          <div className=" bg-white dark:bg-[#0F172A] text-gray-800 dark:text-gray-100 scrollbar-none flex overflow-x-auto snap-x snap-mandatory pb-4 gap-8 mt-14">
 
             { recommendArticles.map(article => (
 
-              <Newsitems
+              <div
                 key={ article.article_id }
-                { ...article }
-                onGenerateSummary={ generateSummary }
-              />
+                className="w-[300px] md:w-[335px] flex-shrink-0 snap-start"
+              >
+                <Newsitems
+                  { ...article }
+                  onGenerateSummary={ generateSummary }
+                />
+              </div>
 
             )) }
 
           </div>
-          <h1 className="text-3xl bg-white dark:bg-[#0F172A] text-gray-800 dark:text-gray-100  py-4 ml-9  flex justify-center align-middle ">
-              Latest News
-            </h1>
 
-            <div className=" h-[2px] bg-blue-50 w-full "></div>
-            <AIChat articles={results} />
         </div>
       ) }
+
+      <div className="px-6 mt-6 mb-6  bg-white dark:bg-[#0F172A] text-gray-800 dark:text-gray-100">
+
+        <div className="mt-6 h-px mb-6 bg-gradient-to-r from-slate-200 via-slate-100 to-transparent" />
+
+
+        <p className="uppercase tracking-[0.3em] ml-6 text-base text-blue-600 font-semibold">
+
+          TODAY'S
+
+        </p>
+
+        <h2 className="font-plus-jakarta text-2xl mt-2 ml-6 font-semibold text-slate-900 dark:text-white">
+
+          Latest Coverage
+
+        </h2>
+
+      </div>
+
+      <AIChat articles={ results } />
 
       {
         loading ? (
@@ -126,7 +163,7 @@ const News = ({ category: propCategory, sortBy }) => {
 
             <motion.div initial="hidden" animate="visible" variants={ { hidden: {}, visible: { transition: { staggerChildren: 0.20 } } } } className="grid p-6 grid-cols-1 bg-[#F8FAFC] dark:bg-[#0F172A] sm:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
 
-              { results.map((element) => {
+              { results.slice(6).map((element) => {
                 return (
 
                   <Newsitems

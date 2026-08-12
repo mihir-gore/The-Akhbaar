@@ -6,7 +6,7 @@ const AIChat = ({ articles }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([{
     role: "assistant",
-    content: "👋Hi! I am your AI news assistant.\n\n Ask me anything about today's news."
+    content: "Hi! I am your AI news assistant.\n\n Ask me anything about today's news."
   }]);
 
   const [input, setInput] = useState("");
@@ -93,7 +93,7 @@ const AIChat = ({ articles }) => {
             <div className="flex items-center justify-between border-b p-5">
               <div>
                 <h2 className="text-lg font-bold">
-                  AI News Assistant
+                  AI News Assistant ✨
                 </h2>
 
                 <p className="text-sm text-gray-500">
