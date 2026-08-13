@@ -15,7 +15,7 @@ import AISummary from "./AISummary";
 import useRecommendations from "../Hooks/useRecommendations";
 import { toast } from "sonner";
 import AIChat from "./AIChat";
-import HeroStory from "../components/HeroStory";
+import HeroStory from "./HeroStory";
 
 
 const News = ({ category: propCategory, sortBy }) => {
@@ -76,7 +76,7 @@ const News = ({ category: propCategory, sortBy }) => {
           <div className=" h-px mb-6 flex bg-gradient-to-r from-slate-200 via-slate-100 to-transparent" />
 
           <div className="mb-8 px-6">
-
+            
             <p className="uppercase tracking-[0.3em] ml-1 text-base text-blue-600 font-semibold">
               PERSONALIZED
             </p>
@@ -85,14 +85,14 @@ const News = ({ category: propCategory, sortBy }) => {
               Recommended for You
             </h2>
 
-            <p className="text-slate-500 mb-2">
+            <p className="text-slate-500 mb-1 ">
               Personalized stories selected from your interests,reading history, and trending topics.
             </p>
 
           </div>
 
 
-          <div className=" bg-white dark:bg-[#0F172A] text-gray-800 dark:text-gray-100 scrollbar-none flex overflow-x-auto snap-x snap-mandatory pb-4 gap-8 mt-14">
+          <div className=" bg-white ml-5 dark:bg-[#0F172A] text-gray-800 dark:text-gray-100 scrollbar-none flex overflow-x-auto snap-x snap-mandatory pb-4 gap-8 mt-14">
 
             { recommendArticles.map(article => (
 
@@ -161,7 +161,7 @@ const News = ({ category: propCategory, sortBy }) => {
             }
           >
 
-            <motion.div initial="hidden" animate="visible" variants={ { hidden: {}, visible: { transition: { staggerChildren: 0.20 } } } } className="grid p-6 grid-cols-1 bg-[#F8FAFC] dark:bg-[#0F172A] sm:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
+            <motion.div initial="hidden" animate="visible" variants={ { hidden: {}, visible: { transition: { staggerChildren: 0.20 } } } } className="grid  p-6 grid-cols-1 bg-[#F8FAFC] dark:bg-[#0F172A] sm:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
 
               { results.slice(6).map((element) => {
                 return (

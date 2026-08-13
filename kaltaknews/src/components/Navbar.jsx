@@ -59,7 +59,7 @@ const Navbar = ({ darkMode, setDarkMode, sortBy, setSortBy }) => {
 
   return (
 
-    <nav className="w-full max-w-full overflow-x-clip sticky top-0 z-[100] backdrop-blur-xl bg-white/80 dark:bg-[#0F172A]/90 border-b border-gray-200/70 dark:border-slate-700">
+    <nav className="w-full max-w-full overflow-x-clip sticky top-0 z-[100] backdrop-blur-xl bg-white/80 dark:bg-[#0F172A]/90 border-b border-gray-200/70 dark:border-slate-700 ">
       <div className="w-full mx-auto px-3 sm:px-4 lg:px-6">
         <div className="min-h-[54px] w-full max-w-full overflow-visible  mx-auto h-[62px] px-1  sm:px-4 lg:px-6 flex items-center justify-between ">
           
