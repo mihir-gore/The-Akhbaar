@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useAuth } from "../Contexts/AuthContext";
-import { APIKEY } from "../config";
 
 const useRecommendations =(enabled)=>{
 const {user,loading}=useAuth();
@@ -17,7 +16,7 @@ const fetchRecommendations=async()=>{
             const recommendation= await axios.get(`http://localhost:5000/api/recommendations/${user.uid}`)
             const category=recommendation.data.category;
               const  response= await axios.get(
-                `https://newsdata.io/api/1/latest`,
+                `http://localhost:5000/api/news?$
                 {
                     params: {
                         apikey: APIKEY,
@@ -26,7 +25,7 @@ const fetchRecommendations=async()=>{
                         size: 6,
                         category
                     }
-                }
+                }`
             );
            setRecommendArticles(response.data.results || [])
         }catch(error){

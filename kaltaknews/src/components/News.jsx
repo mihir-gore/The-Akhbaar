@@ -36,7 +36,7 @@ const News = ({ category: propCategory, sortBy }) => {
       setLoadingSummary(true);
       setShowSummary(true);
       const response = await axios.post("http://localhost:5000/api/ai/summarize", {
-        title: article.title, description: article.description
+         article_id: article.article_id,title: article.title, description: article.description
 
       })
       setSummary(response.data.summary)

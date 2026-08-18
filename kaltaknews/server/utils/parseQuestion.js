@@ -163,7 +163,20 @@ const categories = {
         }
 
   }
-    if (!category) {
+  const locationMatch = text.match(
+        /\bin\s+(.+?)(?:\s+(?:today|today's|todays|now|latest|news|headlines?|updates?))?$/i
+    );
+
+      const location = locationMatch?locationMatch[1].trim(): null;
+       if (location) {
+
+        const categoryText = category? category: "";
+
+        search = `${categoryText} ${location}`.trim();
+        category = null;
+       }
+
+    if (!category && !search) {
 
         const cleaned = question
             .replace(/\d+/g, "")
@@ -185,5 +198,6 @@ const categories = {
   return {
     category,search,count
   }
+  
 }
 module.exports=parseQuestion;

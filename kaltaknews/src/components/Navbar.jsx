@@ -123,7 +123,7 @@ const Navbar = ({ darkMode, setDarkMode, sortBy, setSortBy }) => {
             <Link to="/bookmarks" className="text-[15px] font-medium text-slate-700 dark:text-slate-200 hover:text-blue-600 transition-all duration-200">Bookmarks </Link>
 
             <Link to="/history" className="text-[15px] font-medium text-slate-700 dark:text-slate-200 hover:text-blue-600 transition-all duration-200">History </Link>
-            <input type="text" placeholder="Search News.." value={ search } onChange={ (e) => { setSearch(e.target.value) } } onKeyDown={ (e) => { if (e.key === "Enter") { navigate(`/search/${search}`) } } } className="px-4 py-2 text-gray-700 bg-white dark:bg-[#0F172A] rounded-lg border border-gray-700 outline-none focus:ring-1 focus:ring-blue-500 hover:scale-105 transition-all duration-300 ease-out hover:border-blue-400 h-9 w-40" />
+            <input type="text" placeholder="Search News.." value={ search } onChange={ (e) => { setSearch(e.target.value) } } onKeyDown={ (e) => { if (e.key === "Enter") { navigate(`/search/${search}`) } } } className="px-4 py-2 text-gray-700 dark:text-white bg-white dark:bg-[#0F172A] rounded-lg border border-gray-700 outline-none focus:ring-1 focus:ring-blue-500 hover:scale-105 transition-all duration-300 ease-out hover:border-blue-400 h-9 w-40" />
 
           </div>
 

@@ -65,7 +65,7 @@ const Newsitems = (props) => {
                 </button>
 
 
-                <button title="Generate AI Summary" className="p-2 rounded-xl transition-colors duration-300 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-blue-400 " onClick={ () => onGenerateSummary({ title, description }) }> <WandSparkles size={ 20 } className="transition-all duration-300 hover:text-cyan-400 hover:scale-110" /></button>
+                <button title="Generate AI Summary" className="p-2 rounded-xl transition-colors duration-300 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-blue-400 " onClick={ () => onGenerateSummary({ article_id,title, description }) }> <WandSparkles size={ 20 } className="transition-all duration-300 hover:text-cyan-400 hover:scale-110" /></button>
 
             </div>
             <div className='p-5 flex flex-col flex-grow'>

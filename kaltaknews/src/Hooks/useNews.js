@@ -1,7 +1,4 @@
 import React, { use, useEffect, useState } from "react";
-import { APIKEY } from "../config";
-
-  
 
 const useNews = ({ category, sortBy, keyword }) => {
 
@@ -10,11 +7,20 @@ const useNews = ({ category, sortBy, keyword }) => {
   const [nextPage, setNextPage] = useState(null);
   const [error, setError] = useState(null);
   const [loadingMore, setLoadingMore] = useState(false);
- 
+  
   const buildURL=(page=null)=>{
-      
-      return `https://newsdata.io/api/1/latest?apikey=${APIKEY}&size=9&country=in&language=en,hi&sort=${sortBy || "pubdateasc"}&${keyword ? `q=${keyword}` : `category=${category}`}${page ? `&page=${page}` : ""}`;
+      const params= new URLSearchParams();
+      params.set("sort",sortBy || "pubdateasc");
+      if(keyword){
+        params.set("q",keyword);
+      }else{
+        params.set("category",category || "top");
+      }
+      if(page){
+        params.set("page",page)
+      }
 
+      return `http://localhost:5000/api/news?${params.toString()}`
   }
 
   const fetchInitialNews = async () => {
