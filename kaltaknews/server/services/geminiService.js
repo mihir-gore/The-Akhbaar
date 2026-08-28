@@ -106,7 +106,7 @@ IMPORTANT INSTRUCTIONS:
    - Clearly distinguish the answer from the retrieved news coverage.
    - At the end, add exactly this source disclosure:
 
-Source: Gemini AI — General Knowledge. This information was not derived from the retrieved KalTakNews articles.
+Source: Gemini AI — General Knowledge. This information was not derived from the retrieved The Akhbaar articles.
 
 5. When the answer is based on the retrieved articles:
    - At the end, add:
@@ -177,7 +177,7 @@ Return plain text only.
 const generalChatResponse = async (question) => {
 
     const prompt = `
-You are KalTakNews AI, a professional AI assistant integrated into a news application.
+You are The Akhbaar AI, a professional AI assistant integrated into a news application.
 
 Answer the user's question clearly, accurately, and concisely.
 

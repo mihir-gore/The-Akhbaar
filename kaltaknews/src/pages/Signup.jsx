@@ -37,7 +37,7 @@ const Signup = () => {
 
       <div className="text-center mb-10">
         <h1 className="text-3xl font-bold dark:text-white cursor-pointer shadow-lg " >
-          KalTak<span className="text-blue-700 dark:text-white-100">News</span>
+          The<span className="text-blue-700 dark:text-white-100 ml-1">Akhbaar</span>
         </h1>
         <p className="text-slate-400 mt-2">
           Sign Up to continue

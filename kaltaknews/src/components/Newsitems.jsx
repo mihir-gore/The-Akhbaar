@@ -31,7 +31,7 @@ const Newsitems = (props) => {
             if (navigator.share) {
                 await navigator.share({
                     title: title,
-                    text: `${title} - Read more on KalTakNews`,
+                    text: `${title} - Read more on The Akhbaar`,
                     url: link
                 })
             } else {

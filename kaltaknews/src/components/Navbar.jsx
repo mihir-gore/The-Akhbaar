@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import Sortdropdown from "./Sortdropdown";
-import logo512 from "../images/logo512.png";
+import logo192 from "../images/logo192.png";
 import { useAuth } from "../Contexts/AuthContext";
 import UserDropdown from "./UserDropdown";
 import { UserRound } from 'lucide-react';
@@ -71,12 +71,12 @@ const Navbar = ({ darkMode, setDarkMode, sortBy, setSortBy }) => {
           </button>
           
           {/* Logo */ }
-          <div className="flex-shrink-0 min-w-0 justify-between items-center dark:bg-[#0F172A]">
+          <div className="flex-shrink-0 min-w-0 justify-between items-center ">
             <a className="flex items-center justify-between hover:shadow-2xl transition-all duration-300 ease-out hover:scale-105" href="/" onClick={ () => navigate("/") }>
-              <img src={ logo512 } alt="Logo" className="  ml-0 sm:ml-1  rounded mt-1 h-9 w-9 sm:h-10 sm:w-10 lg:h-11 lg:w-11 " />
+              <img src={ logo192 } alt="Logo" className=" dark:bg-[#282C37] ml-0 sm:ml-1 bg-white/80 rounded mt-1 h-9 w-9 sm:h-10 sm:w-10 lg:h-11 lg:w-11 " />
 
-              <h1 className="text-xl  whitespace-nowrap xl:gap-4 font-bold dark:text-white cursor-pointer hover:shadow-2xl transition-all duration-300 ease-out hover:scale-110 ml-1  " >
-                KalTak<span className="text-blue-700 dark:text-white-100 dark:bg-[#0F172A]">News</span>
+              <h1 className=" font-[Manrope] text-3xl font-extrabold tracking-[-0.03em] text-slate-900 whitespace-nowrap xl:gap-4  dark:text-blue-700  cursor-pointer hover:shadow-2xl transition-all duration-300 ease-out hover:scale-110 ml-1  " >
+                The<span className="text-blue-700 dark:text-white ml-1">Akhbaar</span>
               </h1>
             </a>
           </div>

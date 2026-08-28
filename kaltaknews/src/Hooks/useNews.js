@@ -93,7 +93,7 @@ const loadMore = async () => {
       top: 0,
       behavior: "smooth"
     });
-    document.title = keyword ? `${keyword} News - KalTakNews` : `${category.charAt(0).toUpperCase() + category.slice(1).toLowerCase()} - KalTakNews`;
+    document.title = keyword ? `${keyword} News - The Akhbaar` : `${category.charAt(0).toUpperCase() + category.slice(1).toLowerCase()} - The Akhbaar`;
     fetchInitialNews();
   }, [category, keyword, sortBy]);
 
