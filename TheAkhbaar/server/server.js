@@ -1,5 +1,6 @@
 
-require("dotenv").config({path: "../.env"});
+const path = require("path");
+require("dotenv").config({path: path.resolve(__dirname, ".env")});
 const express = require('express');
 const {connectRedis} = require("./db/redis");
 const pool = require('./db/database');
@@ -9,8 +10,10 @@ const historyRoutes=require("./routes/historyRoutes")
 const aiRoutes=require("./routes/aiRoutes")
 const recommendationRoutes=require("./routes/recommendationRoutes")
 const newsRoutes=require("./routes/newsRoutes")
+const marketNewsRoutes = require("./routes/marketNewsRoutes");
 const app = express();
 const cors=require("cors");
+const PORT=process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());    
 app.use("/api/users", userRoutes)
@@ -19,6 +22,7 @@ app.use("/api/history",historyRoutes)
 app.use("/api/ai",aiRoutes)
 app.use("/api/recommendations",recommendationRoutes)
 app.use("/api/news",newsRoutes)
+app.use("/api/market-news", marketNewsRoutes);  
 app.get("/", async (req, res) => {
     try {
 
@@ -40,8 +44,8 @@ app.get("/", async (req, res) => {
  const startServer=async()=>{
     try{
         await connectRedis();
-        app.listen(5000,()=>{
-            console.log("Server is running on port 5000");
+        app.listen(PORT,()=>{
+            console.log(`Server is running on port ${PORT} `);
         })
     }
     catch(error){

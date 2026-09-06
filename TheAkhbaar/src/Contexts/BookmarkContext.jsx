@@ -3,6 +3,8 @@ import axios from "axios";
 import { useAuth } from "./AuthContext";
 import { toast } from "sonner";
 
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
 export const BookmarkContext = createContext();
 
 const BookmarkProvider = ({ children }) => {
@@ -15,7 +17,7 @@ const BookmarkProvider = ({ children }) => {
         
             const fetchBookmarks= async()=>{
             try{
-                const response= await axios.get(`http://localhost:5000/api/bookmarks/${user.uid}`)
+                const response= await axios.get(`${API_URL}/api/bookmarks/${user.uid}`)
                 setBookmarks(response.data)           
             }catch(error){
                 console.error(error);
@@ -40,7 +42,7 @@ const BookmarkProvider = ({ children }) => {
                             source_name:article.source_name,
                             category:article.category?.[1] || article.category?.[0]
                 }
-                const response=await axios.post("http://localhost:5000/api/bookmarks",bookmarkData)
+                const response=await axios.post(`${API_URL}/api/bookmarks`,bookmarkData)
            
                  setBookmarks(prev=>[response.data,...prev])
                    toast.success("Added to Bookmarks!")
@@ -54,7 +56,7 @@ const BookmarkProvider = ({ children }) => {
     const removeBookmark =async (bookmarkId) => {
               try{
 
-                await axios.delete(`http://localhost:5000/api/bookmarks/${bookmarkId}`)
+                await axios.delete(`${API_URL}/api/bookmarks/${bookmarkId}`)
                  
         setBookmarks(prev => prev.filter(bookmark => bookmark.id !== bookmarkId));
              toast.success("Removed from Bookmarks!")   

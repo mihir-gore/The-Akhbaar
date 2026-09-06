@@ -16,13 +16,15 @@ import useRecommendations from "../Hooks/useRecommendations";
 import { toast } from "sonner";
 import AIChat from "./AIChat";
 import HeroStory from "./HeroStory";
-
+import MarketNews from "../components/MarketNews";
+import { MoveRight } from 'lucide-react';
 
 const News = ({ category: propCategory, sortBy }) => {
 
   const { category: routeCategory, keyword } = useParams();
   const category = routeCategory || propCategory || "top";
   const { results, error, nextPage, loading, loadingMore, loadMore } = useNews({ category, sortBy, keyword });
+  const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
   const [summary, setSummary] = useState(null);
   const [loadingSummary, setLoadingSummary] = useState(false);
@@ -35,7 +37,7 @@ const News = ({ category: propCategory, sortBy }) => {
     try {
       setLoadingSummary(true);
       setShowSummary(true);
-      const response = await axios.post("http://localhost:5000/api/ai/summarize", {
+      const response = await axios.post(`${API_URL}/api/ai/summarize`, {
          article_id: article.article_id,title: article.title, description: article.description
 
       })
@@ -74,10 +76,10 @@ const News = ({ category: propCategory, sortBy }) => {
         <div className="mt-3  bg-white dark:bg-[#0F172A] text-gray-800 dark:text-gray-100 p-6 ">
 
           <div className=" h-px mb-6 flex bg-gradient-to-r from-slate-200 via-slate-100 to-transparent" />
-
-          <div className="mb-8 px-6">
+          <div className="mb-8 px-6  cursor-default select-none flex items-center justify-between"> 
+          <div className="cursor-default select-none">
             
-            <p className="uppercase tracking-[0.3em] ml-1 text-base text-blue-600 font-semibold">
+            <p className="uppercase tracking-[0.3em]  text-base text-blue-600 font-semibold">
               PERSONALIZED
             </p>
 
@@ -90,9 +92,12 @@ const News = ({ category: propCategory, sortBy }) => {
             </p>
 
           </div>
+          <MoveRight size={20} className="text-blue-600 cursor-pointer" />
+
+          </div>
 
 
-          <div className=" bg-white ml-5 dark:bg-[#0F172A] text-gray-800 dark:text-gray-100 scrollbar-none flex overflow-x-auto snap-x snap-mandatory pb-4 gap-8 mt-14">
+          <div className=" bg-white ml-5 dark:bg-[#0F172A] text-gray-800 dark:text-gray-100 scrollbar-none flex overflow-x-auto snap-x snap-mandatory pb-4 gap-8 mt-10">
 
             { recommendArticles.map(article => (
 
@@ -112,8 +117,11 @@ const News = ({ category: propCategory, sortBy }) => {
 
         </div>
       ) }
+         <div className=" h-px mb-6 flex bg-gradient-to-r from-slate-200 via-slate-100 to-transparent" />
+        
+         <MarketNews />
 
-      <div className="px-6 mt-6 mb-6  bg-white dark:bg-[#0F172A] text-gray-800 dark:text-gray-100">
+      <div className="px-6 mt-6 mb-6  bg-white dark:bg-[#0F172A] text-gray-800 dark:text-gray-100 cursor-default select-none">
 
         <div className="mt-6 h-px mb-6 bg-gradient-to-r from-slate-200 via-slate-100 to-transparent" />
 

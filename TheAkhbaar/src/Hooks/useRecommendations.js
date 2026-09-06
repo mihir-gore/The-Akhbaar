@@ -6,17 +6,17 @@ const useRecommendations =(enabled)=>{
 const {user,loading}=useAuth();
 const [recommendArticles, setRecommendArticles]=useState([]);
 const [loadingRecommendations,setLoadingRecommendations]=useState(false);
-
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 const fetchRecommendations=async()=>{
         try{
             if(!enabled) return;
             if(loading) return;
             if(!user) return;
             setLoadingRecommendations(true);
-            const recommendation= await axios.get(`http://localhost:5000/api/recommendations/${user.uid}`)
+            const recommendation= await axios.get(`${API_URL}/api/recommendations/${user.uid}`)
             const category=recommendation.data.category;
               const  response= await axios.get(
-                `http://localhost:5000/api/news?$
+                `${API_URL}/api/news?$
                 {
                     params: {
                         apikey: APIKEY,

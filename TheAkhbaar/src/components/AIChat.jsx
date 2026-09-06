@@ -3,12 +3,13 @@ import { X, Sparkles, Send } from "lucide-react";
 import axios from "axios";
 
 const AIChat = ({ articles }) => {
+  const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
     {
       role: "assistant",
       content:
-        "Hi! I am your AI news assistant.\n\n Ask me anything about today's news.",
+        "Hi! I am your AI news assistant.\n Ask me anything about today's news.",
     },
   ]);
 
@@ -30,7 +31,7 @@ const AIChat = ({ articles }) => {
 
     try {
       setLoading(true);
-      const response = await axios.post("http://localhost:5000/api/ai/chat", {
+      const response = await axios.post(`${API_URL}/api/ai/chat`, {
         question,
       });
       setMessages((prev) => [
@@ -58,7 +59,7 @@ const AIChat = ({ articles }) => {
     setMessages((prev) => [...prev, { role: "user", content: text }]);
     try {
       setLoading(true);
-      const response = await axios.post("http://localhost:5000/api/ai/chat", {
+      const response = await axios.post(`${API_URL}/api/ai/chat`, {
         question: text,
       });
       setMessages((prev) => [
@@ -101,10 +102,9 @@ const AIChat = ({ articles }) => {
           <div className="m-6 h-[650px] w-[400px] rounded-3xl bg-white dark:bg-slate-900 shadow-2xl overflow-hidden">
             <div className="flex items-center justify-between border-b p-5">
               <div>
-                <h2 className="text-lg font-bold dark:text-white">
+                <h2 className="text-lg font-bold dark:text-white text-blue-600 ">
                   AI News Assistant ✨
                 </h2>
-
                 <p className="text-sm text-gray-500 dark:text-white">
                   Ask anything about today's news
                 </p>

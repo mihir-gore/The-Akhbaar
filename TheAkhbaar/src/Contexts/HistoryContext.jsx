@@ -3,6 +3,8 @@ import axios from "axios";
 import { useAuth } from "./AuthContext";
 import { toast } from "sonner";
 
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
 export const HistoryContext = createContext();
 
 const HistoryProvider = ({ children }) => {
@@ -15,7 +17,7 @@ const HistoryProvider = ({ children }) => {
         if (!user) return;
         const fetchHistory = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/history/${user.uid}`)
+                const response = await axios.get(`${API_URL}/api/history/${user.uid}`)
                 setHistory(response.data);
             
             }
@@ -44,9 +46,7 @@ const HistoryProvider = ({ children }) => {
 
                         
                 }
-          const response= await axios.post("http://localhost:5000/api/history",
-            historyData
-            )
+          const response= await axios.post(`${API_URL}/api/history`,historyData )
                  setHistory(prev=>[response.data,...prev])
 
         }
@@ -59,7 +59,7 @@ const HistoryProvider = ({ children }) => {
         try {
         
             if (!user) return;
-            await axios.delete(`http://localhost:5000/api/history/clear/${user.uid}`)
+            await axios.delete(`${API_URL}/api/history/clear/${user.uid}`)
             setHistory([]);
             toast.success("Reading History Cleared!")
         }

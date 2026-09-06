@@ -14,6 +14,7 @@ const Login = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const from = location.state?.from?.pathname || '/';
+    const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
     const handleLogin = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -27,7 +28,7 @@ const Login = () => {
                 setLoading(false);
                 return;
             }
-            await axios.post("http://localhost:5000/api/users", { firebase_uid: userCredentials.user.uid, email: userCredentials.user.email })
+            await axios.post(`${API_URL}/api/users`, { firebase_uid: userCredentials.user.uid, email: userCredentials.user.email })
 
             navigate(from, { replace: true });
         } catch (error) {

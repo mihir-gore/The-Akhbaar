@@ -3,11 +3,8 @@ const { redisClient } = require("../db/redis");
 const getNews = async (req, res) => {
     try {
         const { category, sort, q, page } = req.query;
-
         const cacheKey = ["news", category || "top", q || "", page || "initial"].join(":");
-
         const cachedNews = await redisClient.get(cacheKey);
-
         if (cachedNews) {
             console.log("Redis Cache HIT:", cacheKey);
             return res.json(JSON.parse(cachedNews));

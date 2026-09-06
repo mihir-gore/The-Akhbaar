@@ -8,6 +8,8 @@ const useNews = ({ category, sortBy, keyword }) => {
   const [error, setError] = useState(null);
   const [loadingMore, setLoadingMore] = useState(false);
   
+  const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
   const buildURL=(page=null)=>{
       const params= new URLSearchParams();
       params.set("sort",sortBy || "pubdateasc");
@@ -20,7 +22,7 @@ const useNews = ({ category, sortBy, keyword }) => {
         params.set("page",page)
       }
 
-      return `http://localhost:5000/api/news?${params.toString()}`
+      return `${API_URL}/api/news?${params.toString()}`
   }
 
   const fetchInitialNews = async () => {
