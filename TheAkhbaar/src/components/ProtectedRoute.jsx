@@ -1,7 +1,6 @@
 import {Navigate,useLocation} from 'react-router-dom';
 import { useAuth } from '../Contexts/AuthContext';
 import SkeletonCard from './SkeletonCard';
-import Skeleton from 'react-loading-skeleton';
 
 const ProtectedRoute=({children})=>{
     const {user,loading}=useAuth();

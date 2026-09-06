@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Categorydropdown from "./Categorydropdown";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -18,12 +18,12 @@ const Navbar = ({ darkMode, setDarkMode, sortBy, setSortBy }) => {
   const location = useLocation();
   const [search, setSearch] = useState(keyword || "");
   const [debouncedSearch, setDebouncedSearch] = useState(keyword || "");
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
 
   useEffect(() => {
     if (!debouncedSearch.trim()) return;
     navigate(`/search/${debouncedSearch}`);
-  }, [debouncedSearch]);
+  }, [debouncedSearch, navigate]);
 
   useEffect(() => {
     const timer = setTimeout(() => {

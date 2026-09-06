@@ -1,14 +1,11 @@
 import fallbackimg from "../images/image.png";
-import React, { use, useEffect, useState } from "react";
+import  {  useState } from "react";
 import Newsitems from "./Newsitems";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { set } from "date-fns";
 import { useParams } from "react-router-dom";
-import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import SkeletonCard from "./SkeletonCard";
-import { motion, stagger } from "framer-motion";
-import Sortdropdown from "./Sortdropdown";
+import { motion } from "framer-motion";
 import useNews from "../Hooks/useNews";
 import axios from "axios";
 import AISummary from "./AISummary";
@@ -23,13 +20,13 @@ const News = ({ category: propCategory, sortBy }) => {
 
   const { category: routeCategory, keyword } = useParams();
   const category = routeCategory || propCategory || "top";
-  const { results, error, nextPage, loading, loadingMore, loadMore } = useNews({ category, sortBy, keyword });
+  const { results, error, nextPage, loading, loadMore } = useNews({ category, sortBy, keyword });
   const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
   const [summary, setSummary] = useState(null);
   const [loadingSummary, setLoadingSummary] = useState(false);
   const [showSummary, setShowSummary] = useState(false);
-  const { loadingRecommendations, recommendArticles } = useRecommendations(category === "top");
+  const { recommendArticles } = useRecommendations(category === "top");
 
 
   const generateSummary = async (article) => {

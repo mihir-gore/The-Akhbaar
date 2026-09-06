@@ -9,8 +9,7 @@ import History from './pages/History';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import ProtectedRoute from './components/ProtectedRoute';
-import { Toaster, toast } from "sonner";
-import AIChat from './components/AIChat';
+import { Toaster} from "sonner";
 const App = () => {
 
   const [darkMode, setDarkMode] = useState(false);

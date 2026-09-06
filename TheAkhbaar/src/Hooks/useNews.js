@@ -1,4 +1,5 @@
-import React, { use, useEffect, useState } from "react";
+import  {  useCallback, useEffect, useState } from "react";
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
 const useNews = ({ category, sortBy, keyword }) => {
 
@@ -8,9 +9,7 @@ const useNews = ({ category, sortBy, keyword }) => {
   const [error, setError] = useState(null);
   const [loadingMore, setLoadingMore] = useState(false);
   
-  const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
-
-  const buildURL=(page=null)=>{
+  const buildURL = useCallback((page = null) => {
       const params= new URLSearchParams();
       params.set("sort",sortBy || "pubdateasc");
       if(keyword){
@@ -22,32 +21,8 @@ const useNews = ({ category, sortBy, keyword }) => {
         params.set("page",page)
       }
 
-      return `${API_URL}/api/news?${params.toString()}`
-  }
-
-  const fetchInitialNews = async () => {
-    try {
-      setError(null);
-      setLoading(true);
-      setResults([]);
-      const res = await fetch(buildURL());
-      if (!res.ok) {
-        throw new Error("Failed to fetch news! Network response was not ok.");
-      }
-      const data = await res.json();
-      if (data.status === "error") {
-        throw new Error(data.message || "An error occurred while fetching news.");
-      }
-      setResults(Array.isArray(data.results) ? data.results : []);
-      setNextPage(data.nextPage || null);
-    } catch (error) {
-      setError(error.message || "An error occurred while fetching news.");
-    } finally {
-      setLoading(false);
-    };
-  };
-
-
+        return `${API_URL}/api/news?${params.toString()}`;
+      }, [category, keyword, sortBy]);
 
 const loadMore = async () => {
     if (loading || !nextPage) return;
@@ -91,13 +66,35 @@ const loadMore = async () => {
   };
 
    useEffect(() => {
+    const fetchInitialNews = async () => {
+      try {
+        setError(null);
+        setLoading(true);
+        setResults([]);
+        const res = await fetch(buildURL());
+        if (!res.ok) {
+          throw new Error("Failed to fetch news! Network response was not ok.");
+        }
+        const data = await res.json();
+        if (data.status === "error") {
+          throw new Error(data.message || "An error occurred while fetching news.");
+        }
+        setResults(Array.isArray(data.results) ? data.results : []);
+        setNextPage(data.nextPage || null);
+      } catch (error) {
+        setError(error.message || "An error occurred while fetching news.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
     window.scrollTo({
       top: 0,
       behavior: "smooth"
     });
     document.title = keyword ? `${keyword} News - The Akhbaar` : `${category.charAt(0).toUpperCase() + category.slice(1).toLowerCase()} - The Akhbaar`;
     fetchInitialNews();
-  }, [category, keyword, sortBy]);
+  }, [buildURL, category, keyword, sortBy]);
 
   return {
     results,

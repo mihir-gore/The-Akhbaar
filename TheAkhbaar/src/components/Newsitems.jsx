@@ -4,20 +4,14 @@ import { motion } from "framer-motion";
 import useBookmarks from '../Hooks/useBookmarks';
 import { Bookmark, BookmarkCheck, Share } from "lucide-react";
 import useHistory from '../Hooks/useHistory';
-import { auth } from '../firebase';
-import { HistoryContext } from '../Contexts/HistoryContext';
-import { useContext, useState } from 'react';
 import { WandSparkles } from 'lucide-react';
 import { toast } from "sonner";
-
-
-
 
 const Newsitems = (props) => {
 
     const dateValue = props.pubDate || props.created_at || props.viewed_at;
     const time = dateValue ? formatDistanceToNowStrict(new Date(dateValue), { addSuffix: true }) : " Unknown Date"
-    let { id, article_id, title, description, imgurl, image_url, link, article_url, pubDate, viewed_at, creator, source_name, onGenerateSummary, category } = props;
+    let { id, article_id, title, description, imgurl, image_url, link, article_url, pubDate, creator, source_name, onGenerateSummary, category } = props;
     const image = imgurl || image_url;
     const url = link || article_url;
     const { addBookmark, removeBookmark, isBookmarked } = useBookmarks();
@@ -51,7 +45,7 @@ const Newsitems = (props) => {
     };
 
     return (
-        <motion.div variants={ cardVariants } whileHover={ { scale: 1.03, y: -5 } } whileTap={ { scale: 0.90 } } transition={ { type: "spring", stiffness: 300, damping: 20, mass: 0.5 }, { duration: 0.6, ease: "easeOut" } } initial={ { opacity: 0, y: 40 } } animate={ { opacity: 1, y: 0 } } whileHover={ { y: -10, scale: 1.02 } } className=" group max-w-sm mx-auto  relative rounded-xl shadow-md bg-white dark:bg-[#1E293B] overflow-hidden hover:shadow-2xl transition-all duration-300 ease-out hover:-translate-y-2 hover:border-[#4F7C82] h-full flex flex-col ">
+        <motion.div variants={ cardVariants } whileHover={ { scale: 1.03, y: -10 } } whileTap={ { scale: 0.90 } } transition={ { type: "spring", stiffness: 300, damping: 20, mass: 0.5 , duration: 0.6, ease: "easeOut" } } initial={ { opacity: 0, y: 40 } } animate={ { opacity: 1, y: 0 } }  className=" group max-w-sm mx-auto  relative rounded-xl shadow-md bg-white dark:bg-[#1E293B] overflow-hidden hover:shadow-2xl transition-all duration-300 ease-out hover:-translate-y-2 hover:border-[#4F7C82] h-full flex flex-col ">
             <div className='relative overflow-hidden'>
                 <motion.img whileHover={ { scale: 1.05 } } transition={ { duration: 0.5 } } className='w-full h-48 object-cover transition-all duration-500 ease-out group-hover:scale-110 group-hover:brightness-90' loading="lazy" src={ image } onError={ (e) => { e.target.src = fallbackimg; } } alt="Card Image" />
 

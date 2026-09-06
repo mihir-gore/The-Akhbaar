@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 const useMarketNews = ({ q = "", symbol = "", market_id = "", size = 10, } = {}) => {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
   useEffect(() => {
     const fetchMarketNews = async () => {
       try {

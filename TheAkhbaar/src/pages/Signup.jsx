@@ -1,9 +1,8 @@
 import { useState } from 'react';
-import axios from "axios";
 import { createUserWithEmailAndPassword, sendEmailVerification,signOut } from 'firebase/auth';
 import { auth } from '../firebase';
 import { motion } from "framer-motion";
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { toast } from "sonner";
 const Signup = () => {
   const [email, setEmail] = useState('');
@@ -11,8 +10,6 @@ const Signup = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation();
-  const from = location.state?.from?.pathname || '/';
   const handleSignup = async (e) => {
     e.preventDefault();
     setLoading(true);

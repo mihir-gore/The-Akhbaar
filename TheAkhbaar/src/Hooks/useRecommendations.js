@@ -1,12 +1,13 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useAuth } from "../Contexts/AuthContext";
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
 const useRecommendations =(enabled)=>{
 const {user,loading}=useAuth();
 const [recommendArticles, setRecommendArticles]=useState([]);
 const [loadingRecommendations,setLoadingRecommendations]=useState(false);
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+useEffect(()=>{
 const fetchRecommendations=async()=>{
         try{
             if(!enabled) return;
@@ -15,18 +16,12 @@ const fetchRecommendations=async()=>{
             setLoadingRecommendations(true);
             const recommendation= await axios.get(`${API_URL}/api/recommendations/${user.uid}`)
             const category=recommendation.data.category;
-              const  response= await axios.get(
-                `${API_URL}/api/news?$
-                {
-                    params: {
-                        apikey: APIKEY,
-                        country: "in",
-                        language: "en,hi",
-                        size: 6,
-                        category
-                    }
-                }`
-            );
+            const response = await axios.get(`${API_URL}/api/news`, {
+                params: {
+                    category,
+                    size: 6,
+                },
+            });
            setRecommendArticles(response.data.results || [])
         }catch(error){
             console.error(error)
@@ -34,10 +29,8 @@ const fetchRecommendations=async()=>{
             setLoadingRecommendations(false);
         }
 }
-
-useEffect(()=>{
 fetchRecommendations();
-},[user,loading])
+},[enabled, loading, user])
 
 return {
     recommendArticles,loadingRecommendations
