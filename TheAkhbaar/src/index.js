@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import BookmarkProvider from './Contexts/BookmarkContext';
 import HistoryProvider from './Contexts/HistoryContext';
 import { AuthProvider } from './Contexts/AuthContext';
