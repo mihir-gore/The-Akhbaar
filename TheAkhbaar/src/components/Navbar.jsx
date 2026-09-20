@@ -9,7 +9,7 @@ import Sortdropdown from "./Sortdropdown";
 import logo192 from "../images/logo192.png";
 import { useAuth } from "../Contexts/AuthContext";
 import UserDropdown from "./UserDropdown";
-import { UserRound } from "lucide-react";
+
 
 const Navbar = ({ darkMode, setDarkMode, sortBy, setSortBy }) => {
   const navigate = useNavigate();
@@ -19,6 +19,15 @@ const Navbar = ({ darkMode, setDarkMode, sortBy, setSortBy }) => {
   const [search, setSearch] = useState(keyword || "");
   const [debouncedSearch, setDebouncedSearch] = useState(keyword || "");
   const { user } = useAuth();
+
+  const displayName = user?.displayName || user?.email?.split("@")[0] || "User";
+
+  const initials = displayName
+    .split(" ")
+    .map((word) => word.charAt(0))
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
 
   useEffect(() => {
     if (!debouncedSearch.trim()) return;
@@ -148,7 +157,17 @@ const Navbar = ({ darkMode, setDarkMode, sortBy, setSortBy }) => {
             </span>
 
             <div className="flex items-center justify-between space-x-1 text-[15px] font-medium text-slate-700 dark:text-slate-200 hover:text-blue-600">
-              <svg xmlns="http://w3.org" className="cursor-none " viewBox="0 0 24 24" width="24" height="21" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+              <svg
+                xmlns="http://w3.org"
+                className="cursor-none "
+                viewBox="0 0 24 24"
+                width="24"
+                height="21"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               >
                 <path d="M4 6h12M4 12h8M4 18h8M19 10v10m0 0l-3-3m3 3l3-3" />
               </svg>
@@ -204,8 +223,12 @@ const Navbar = ({ darkMode, setDarkMode, sortBy, setSortBy }) => {
                 </Link>
               </>
             ) : (
-              <div className="flex items-center gap-1 text-black">
-                <UserRound />
+              <div className="flex items-center gap-2 text-black">
+                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-blue-600 border border-white shadow-sm flex items-center justify-center">
+                  <span className="text-sm font-semibold text-white">
+                    {initials}
+                  </span>
+                </div>
                 <UserDropdown />
               </div>
             )}

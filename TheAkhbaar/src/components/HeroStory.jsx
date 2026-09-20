@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-
+import useHistory from '../Hooks/useHistory';
+import { Bookmark, BookmarkCheck } from "lucide-react";
+import useBookmarks from '../Hooks/useBookmarks';
 const HeroStory = ({ articles = [] }) => {
   const heroStories = articles.slice(0, 5);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const [progress, setProgress] = useState(0);
-
+  const { addtoHistory } = useHistory();
+  const { addBookmark, removeBookmark, isBookmarked } = useBookmarks();
   const current = heroStories[currentIndex];
-
+  const bookmarked = isBookmarked(current.article_id);
+  
   useEffect(() => {
     if (paused || heroStories.length <= 1) return;
 
@@ -41,6 +45,39 @@ const HeroStory = ({ articles = [] }) => {
   };
 
   if (!current) return null;
+
+  const handleReadStory = () => {
+    if (!current) return;
+    addtoHistory({
+      article_id: current.article_id,
+      title: current.title,
+      description: current.description,
+      imgurl: current.image_url,
+      link: current.link,
+      source_name: current.source_name,
+      pubDate: current.pubDate,
+      category: current.category,
+    });
+  };
+  
+   const handleBookmark = () => {
+    if (!current) return;
+
+    if (bookmarked) {
+      removeBookmark(current.article_id);
+    } else {
+      addBookmark({
+        article_id: current.article_id,
+        title: current.title,
+        description: current.description,
+        imgurl: current.image_url,
+        link: current.link,
+        source_name: current.source_name,
+        pubDate: current.pubDate,
+        category: current.category,
+      });
+    }
+  };
 
   return (
     <section
@@ -128,7 +165,11 @@ const HeroStory = ({ articles = [] }) => {
                     { current.pubDate }
                   </span>
 
-                  <a href={ current.link } target="_blank" rel="noreferrer" className="ml-auto rounded-full bg-white px-6 py-2 font-semibold text-black transition hover:scale-105"                  >
+                   <button title="Bookmark" onClick={handleBookmark} className="p-2 rounded-full transition-colors duration-300 hover:bg-gray-900 dark:text-gray-300 dark:hover:bg-blue-400 " >
+                    { bookmarked ? <BookmarkCheck size={ 20 } /> : <Bookmark size={ 20 } /> }
+                </button>
+
+                  <a onClick={ handleReadStory } href={ current.link } target="_blank" rel="noreferrer" className="ml-auto rounded-full hover:bg-gray-900 hover:text-white bg-white px-4 py-2 font-semibold text-black transition-colors duration-300 focus:ring-1 border border-gray-300 hover:scale-105" >
                     Read Story →
                   </a>
 

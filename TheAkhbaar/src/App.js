@@ -10,6 +10,7 @@ import Signup from './pages/Signup';
 import Login from './pages/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 import { Toaster} from "sonner";
+import Profile from "./pages/Profile";
 const App = () => {
 
   const [darkMode, setDarkMode] = useState(false);
@@ -33,6 +34,7 @@ const App = () => {
           <Route path="/history" element={ <ProtectedRoute><History /></ProtectedRoute> } />
           <Route path="/signup" element={ <Signup /> } />
           <Route path="/login" element={ <Login /> } />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </AnimatePresence>
       
