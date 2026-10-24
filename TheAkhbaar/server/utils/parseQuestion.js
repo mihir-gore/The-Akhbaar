@@ -1,180 +1,180 @@
 
-const parseQuestion=(question)=>{
-    const text= question.toLowerCase();
+const parseQuestion = (question) => {
+    if (typeof question !== "string" || !question.trim()) {
+        return {
+            category: null,
+            search: null,
+            count: 5
+        }
+    }
+    const text = question.trim().toLowerCase();
 
-    let category=null;
-    let search= null;
+    let category = null;
+    let search = null;
     let count = 5;
 
-    const countMatch=text.match(/\d+/);
-    if(countMatch){
-        count=Math.min(Number(countMatch[0]),20)
-}
-const categories = {
-    top: [
-        "top",
-        "headline",
-        "headlines",
-        "latest news",
-        "breaking",
-        "breaking news",
-        "trending",
-        "top news",
-        "trending today",
-    ],
+    const countMatch = text.match(/\d+/);
+    if (countMatch) {
+        count = Math.min(Number(countMatch[0]), 20)
+    }
+    const categories = {
+        top: [
+            "top",
+            "headline",
+            "headlines",
+            "latest news",
+            "breaking",
+            "breaking news",
+            "trending",
+            "top news",
+            "trending today",
+        ],
 
-    business: [
-        "business",
-        "market",
-        "markets",
-        "finance",
-        "stock",
-        "stocks",
-        "economy"
-    ],
+        business: [
+            "business",
+            "market",
+            "markets",
+            "finance",
+            "stock",
+            "stocks",
+            "economy"
+        ],
 
-    crime: [
-        "crime",
-        "murder",
-        "robbery",
-        "attack",
-        "fraud",
-        "police",
-        "arrest"
-    ],
+        crime: [
+            "crime",
+            "murder",
+            "robbery",
+            "attack",
+            "fraud",
+            "police",
+            "arrest"
+        ],
 
-    domestic: [
-        "india",
-        "domestic",
-        "national"
-    ],
+        domestic: [
+            "india",
+            "domestic",
+            "national"
+        ],
 
-    education: [
-        "education",
-        "school",
-        "college",
-        "university",
-        "exam",
-        "neet",
-        "jee",
-        "upsc"
-    ],
+        education: [
+            "education",
+            "school",
+            "college",
+            "university",
+            "exam",
+            "neet",
+            "jee",
+            "upsc"
+        ],
 
-    entertainment: [
-        "entertainment",
-        "movie",
-        "movies",
-        "bollywood",
-        "hollywood",
-        "actor",
-        "actress",
-        "celebrity"
-    ],
+        entertainment: [
+            "entertainment",
+            "movie",
+            "movies",
+            "bollywood",
+            "hollywood",
+            "actor",
+            "actress",
+            "celebrity"
+        ],
 
-    environment: [
-        "environment",
-        "climate",
-        "pollution",
-        "weather"
-    ],
+        environment: [
+            "environment",
+            "climate",
+            "pollution",
+            "weather"
+        ],
 
-    food: [
-        "food",
-        "recipe",
-        "restaurant",
-        "cooking"
-    ],
+        food: [
+            "food",
+            "recipe",
+            "restaurant",
+            "cooking"
+        ],
 
-    health: [
-        "health",
-        "medical",
-        "hospital",
-        "covid",
-        "virus",
-        "fitness"
-    ],
+        health: [
+            "health",
+            "medical",
+            "hospital",
+            "covid",
+            "virus",
+            "fitness"
+        ],
 
-    lifestyle: [
-        "lifestyle",
-        "fashion",
-        "travel",
-        "beauty"
-    ],
+        lifestyle: [
+            "lifestyle",
+            "fashion",
+            "travel",
+            "beauty"
+        ],
 
-    politics: [
-        "politics",
-        "government",
-        "election",
-        "parliament",
-        "minister"
-    ],
+        politics: [
+            "politics",
+            "government",
+            "election",
+            "parliament",
+            "minister"
+        ],
 
-    science: [
-        "science",
-        "research",
-        "space",
-        "nasa"
-    ],
+        science: [
+            "science",
+            "research",
+            "space",
+            "nasa"
+        ],
 
-    sports: [
-        "sports",
-        "sport",
-        "cricket",
-        "football",
-        "ipl",
-        "tennis",
-        "hockey",
-        "kabaddi"
-    ],
+        sports: [
+            "sports",
+            "sport",
+            "cricket",
+            "football",
+            "ipl",
+            "tennis",
+            "hockey",
+            "kabaddi"
+        ],
 
-    technology: [
-        "technology",
-        "tech",
-        "ai",
-        "artificial intelligence",
-        "chatgpt",
-        "openai",
-        "google",
-        "microsoft",
-        "apple",
-        "startup"
-    ],
+        technology: [
+            "technology",
+            "tech",
+            "ai",
+            "artificial intelligence",
+            "chatgpt",
+            "openai",
+            "google",
+            "microsoft",
+            "apple",
+            "startup"
+        ],
 
-    tourism: [
-        "tourism",
-        "travel destination",
-        "vacation"
-    ],
+        tourism: [
+            "tourism",
+            "travel destination",
+            "vacation"
+        ],
 
-    world: [
-        "world",
-        "international",
-        "global"
-    ]
-};
+        world: [
+            "world",
+            "international",
+            "global"
+        ]
+    };
 
-  for (const [cat,keywords] of Object.entries(categories)){
-    
-        if (keywords.some(keyword => text.includes(keyword))) {
-
-            category = cat;
-            break;
-
-        }
-
-  }
-  const locationMatch = text.match(
+    for (const [cat, keywords] of Object.entries(categories)) {
+        if (keywords.some(keyword => new RegExp(`\\b${keyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i").test(text))) { category = cat; break; }
+    }
+    const locationMatch = text.match(
         /\bin\s+(.+?)(?:\s+(?:today|today's|todays|now|latest|news|headlines?|updates?))?$/i
     );
 
-      const location = locationMatch?locationMatch[1].trim(): null;
-       if (location) {
+    const location = locationMatch ? locationMatch[1].trim() : null;
+    if (location) {
 
-        const categoryText = category? category: "";
+        const categoryText = category ? category : "";
 
         search = `${categoryText} ${location}`.trim();
         category = null;
-       }
+    }
 
     if (!category && !search) {
 
@@ -195,9 +195,9 @@ const categories = {
 
         search = cleaned;
     }
-  return {
-    category,search,count
-  }
-  
+    return {
+        category, search, count
+    }
+
 }
-module.exports=parseQuestion;
+module.exports = parseQuestion;

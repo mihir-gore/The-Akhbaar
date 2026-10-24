@@ -18,8 +18,6 @@ const Newsitems = (props) => {
     const bookmarked = isBookmarked(article_id);
     const { addtoHistory } = useHistory();
 
-
-
     const shareArticle = async () => {
         try {
             if (navigator.share) {
@@ -46,9 +44,20 @@ const Newsitems = (props) => {
 
     return (
         <motion.div variants={ cardVariants } whileHover={ { scale: 1.03, y: -10 } } whileTap={ { scale: 0.90 } } transition={ { type: "spring", stiffness: 300, damping: 20, mass: 0.5 , duration: 0.6, ease: "easeOut" } } initial={ { opacity: 0, y: 40 } } animate={ { opacity: 1, y: 0 } }  className=" group max-w-sm mx-auto  relative rounded-xl shadow-md bg-white dark:bg-[#1E293B] overflow-hidden hover:shadow-2xl transition-all duration-300 ease-out hover:-translate-y-2 hover:border-[#4F7C82] h-full flex flex-col ">
-            <div className='relative overflow-hidden'>
-                <motion.img whileHover={ { scale: 1.05 } } transition={ { duration: 0.5 } } className='w-full h-48 object-cover transition-all duration-500 ease-out group-hover:scale-110 group-hover:brightness-90' loading="lazy" src={ image } onError={ (e) => { e.target.src = fallbackimg; } } alt="Card Image" />
+         <div className='relative overflow-hidden h-48 bg-gradient-to-br from-slate-800 via-slate-900 to-blue-950 flex flex-col items-center justify-center'>
+                
+                <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:16px_16px]"></div>
+                <span className="text-slate-300 text-xs font-bold uppercase tracking-wider z-0">The Akhbaar</span>
 
+                <motion.img  whileHover={{ scale: 1.05 }}  transition={{ duration: 0.5 }}  className='absolute inset-0 w-full h-48 object-cover transition-all duration-500 ease-out group-hover:scale-110 group-hover:brightness-90 z-10'  loading="lazy"  src={image || fallbackimg}  onError={(e) => { 
+                        if (e.target.src !== fallbackimg && fallbackimg) {
+                            e.target.src = fallbackimg;
+                        } else {
+                            e.target.style.display = 'none';
+                        }
+                    }} 
+                    alt={title || "News Image"} 
+                />
             </div>
             <div className=' flex justify-between items-center transition-all duration-300 '>
                 <span className='bg-gradient-to-t from-blue-500/70 to-transparent  text-black/80 text-xs px-2 py-1 transition '>{ source_name }</span>

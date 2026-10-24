@@ -20,13 +20,8 @@ import HeroSkeleton from "./HeroSkeleton";
 const News = ({ category: propCategory, sortBy }) => {
   const { category: routeCategory, keyword } = useParams();
   const category = routeCategory || propCategory || "top";
-  const { results, error, nextPage, loading, loadMore } = useNews({
-    category,
-    sortBy,
-    keyword,
-  });
+  const { results, error, nextPage, loading, loadMore } = useNews({category,sortBy,keyword,});
   const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
-
   const [summary, setSummary] = useState(null);
   const [loadingSummary, setLoadingSummary] = useState(false);
   const [showSummary, setShowSummary] = useState(false);

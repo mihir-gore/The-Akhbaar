@@ -6,7 +6,6 @@ const summarizeArticle = async (req, res) => {
 
     try {
         const { article_id, title, description } = req.body;
-
         const summaryCacheKey = article_id ? `ai-summary:${article_id}` : `ai-summary:${title.trim().toLowerCase()}`;
         const cachedSummary = await redisClient.get(summaryCacheKey);
         if (cachedSummary) {
@@ -41,6 +40,12 @@ const aiChat = async (req, res) => {
 
     try {
         const { question } = req.body;
+        if (typeof question !== "string" || !question.trim()) {
+        return res.status(400).json({ 
+        success: false, 
+        message: "A valid question is required." 
+        });
+     }
         const { category, search, count } = parseQuestion(question);
 
         const aiResponseCacheKey = ["ai-chat-response", category || "", search || "", count || 10, question.trim().toLowerCase()].join(":");
